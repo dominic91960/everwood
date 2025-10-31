@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Addimage from "./Addimage.png";
 import Image from "next/image";
+import { uploadImageToSupabase, getSupabaseBucket } from "@/lib/storage";
 
 interface ThumbnailProps {
   onThumbnailUpload: (url: string) => void;
@@ -23,18 +24,32 @@ const Thumbnail = ({ onThumbnailUpload, initialThumbnail, isEdit }: ThumbnailPro
     const file = e.target.files?.[0];
     if (file) {
       setIsUploading(true);
-      // Create a local preview URL immediately (no Firebase)
-      const localUrl = URL.createObjectURL(file);
-      setThumbnailUrl(localUrl);
-      onThumbnailUpload(localUrl);
-      setUploadProgress("Image selected.");
-      setTimeout(() => setUploadProgress(""), 1500);
-      setIsUploading(false);
+      setUploadProgress("Uploading to Supabase...");
+      try {
+        // Optimistic local preview
+        const localUrl = URL.createObjectURL(file);
+        setThumbnailUrl(localUrl);
+
+        const { publicUrl } = await uploadImageToSupabase(file, 'blogs');
+        setThumbnailUrl(publicUrl);
+        onThumbnailUpload(publicUrl);
+        setUploadProgress("Upload successful.");
+      } catch (err) {
+        console.error('Upload failed:', err);
+        const msg = err instanceof Error ? err.message : typeof err === 'string' ? err : 'Please check bucket name and storage policies.';
+        setUploadProgress(`Upload failed: ${msg}`);
+      } finally {
+        setIsUploading(false);
+        setTimeout(() => setUploadProgress(""), 1800);
+      }
     }
   };
 
   return (
     <div className="space-y-4">
+      {!getSupabaseBucket() && (
+        <div className="text-red-600 text-sm">Missing NEXT_PUBLIC_SUPABASE_BUCKET. Set it in your env.</div>
+      )}
       {thumbnailUrl && (
         <div className="relative group">
           <Image
