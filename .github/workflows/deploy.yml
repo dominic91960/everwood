@@ -90,7 +90,13 @@ jobs:
       - name: Create production .env file
         run: |
           cat << EOF > .env
-          # Database
+          # Docker Hub Configuration
+          DOCKER_USERNAME=${{ env.DOCKER_USERNAME }}
+          
+          # VPS Configuration
+          VPS_HOST=${{ secrets.VPS_HOST }}
+          
+          # Database Configuration
           DATABASE_URL=${{ secrets.PROD_DATABASE_URL }}
           
           # Server Configuration
@@ -99,23 +105,14 @@ jobs:
           
           # JWT Configuration
           JWT_SECRET=${{ secrets.PROD_JWT_SECRET }}
-          JWT_EXPIRES_IN=7d
           
-          # CORS Configuration
-          ALLOWED_ORIGINS=${{ secrets.PROD_ALLOWED_ORIGINS }}
-          
-          # API URL
-          NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+          # API Configuration
+          NEXT_PUBLIC_API_BASE_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
           
           # Supabase Configuration
           NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           NEXT_PUBLIC_SUPABASE_BUCKET=furniture
-          
-          # Docker Images
-          DOCKER_USERNAME=${{ env.DOCKER_USERNAME }}
-          IMAGE_CLIENT=${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME_CLIENT }}:latest
-          IMAGE_SERVER=${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME_SERVER }}:latest
           EOF
           
           # Display .env (without sensitive values)
@@ -145,11 +142,17 @@ jobs:
             # Navigate to deployment directory
             cd ${{ secrets.VPS_DEPLOY_PATH || '/opt/furniture-website' }}
             
-            echo " Setting up environment variables..."
+            echo "🔐 Setting up environment variables..."
             # Decode base64 .env file
             base64 -d .env.b64 > .env
             chmod 600 .env
             rm .env.b64
+            
+            echo "✓ Environment file created"
+            echo "📋 Environment variables (masked):"
+            echo "  - DATABASE_URL: $(grep -q 'DATABASE_URL' .env && echo '✓ Set' || echo '✗ Not set')"
+            echo "  - JWT_SECRET: $(grep -q 'JWT_SECRET' .env && echo '✓ Set' || echo '✗ Not set')"
+            echo "  - DOCKER_USERNAME: $(grep 'DOCKER_USERNAME' .env | cut -d'=' -f2)"
             
             echo "📋 Verifying docker-compose.yml..."
             if [ ! -f docker-compose.yml ]; then
@@ -177,6 +180,9 @@ jobs:
             
             echo "📊 Container status:"
             docker compose ps
+            
+            echo "🔍 Checking API container environment..."
+            docker exec furniture-api-container printenv | grep -E "DATABASE_URL|JWT_SECRET|NODE_ENV" | sed 's/=.*/=***MASKED***/' || echo "Could not check environment"
             
             echo "🧹 Cleaning up old images..."
             docker image prune -af --filter "until=24h"
@@ -263,19 +269,3 @@ jobs:
               echo "📋 Recent Logs:"
               docker compose logs --tail=50
             fi
-
-  # Cleanup old workflow runs
-  cleanup:
-    name: Cleanup Old Workflow Runs
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: deploy-to-vps
-    
-    steps:
-      - name: Delete old workflow runs
-        uses: Mattraks/delete-workflow-runs@v2
-        with:
-          token: ${{ github.token }}
-          repository: ${{ github.repository }}
-          retain_days: 30
-          keep_minimum_runs: 10
