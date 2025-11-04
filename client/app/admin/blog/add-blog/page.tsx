@@ -32,7 +32,7 @@ function QuillEditor() {
 
   // Form states
   const [title, setTitle] = useState("");
-  const [selectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedCategories] = useState<string[]>([]);
   const [contentType] = useState("BLOG");
   const [eventLocation, setEventLocation] = useState("");
@@ -70,7 +70,7 @@ function QuillEditor() {
 
   const quillFormats = [
     "header", "bold", "italic", "underline", "strike", "blockquote",
-    "code-block", "list", "bullet", "indent", "link", "image", "video",
+    "code-block", "list", "indent", "link", "image", "video",
     "color", "background", "script", "font", "size", "align", "direction"
   ];
 
@@ -151,7 +151,7 @@ function QuillEditor() {
         metaKeywords: seoData.metaKeywords,
       };
       
-      // Remove undefined fields (for non-events)
+      // Remove undefined fields (for non-events), but keep empty arrays for tags
       Object.keys(payload).forEach(
         (key) => {
           const typedKey = key as keyof typeof payload;
@@ -161,7 +161,13 @@ function QuillEditor() {
         }
       );
       
+      // Ensure tags is always an array (even if empty)
+      if (!payload.tags) {
+        payload.tags = [];
+      }
+      
       console.log('Submitting blog payload:', payload);
+      console.log('Selected tags:', selectedTags);
 
       // Call the API to create the blog post
       const response = await api.content.create(payload);
@@ -272,12 +278,45 @@ function QuillEditor() {
             initialCategories={selectedCategories}
           /> */}
 
-          {/* <TagInput
-            onTagsChange={setSelectedTags}
-            initialTags={selectedTags}
-            placeholder="Add tags..."
-            isEdit={false}
-          /> */}
+          {/* Tag Dropdown */}
+          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">Tags</h2>
+            <select
+              value={selectedTags[0] || ""}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value) {
+                  setSelectedTags([value]);
+                } else {
+                  setSelectedTags([]);
+                }
+              }}
+              className="w-full rounded-3xl border p-1 bg-transparent border-[#4796A9] pl-[3%] focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Select a tag</option>
+              <option value="Living">Living</option>
+              <option value="Bedroom">Bedroom</option>
+              <option value="Wardrobes">Wardrobes</option>
+            </select>
+            {selectedTags.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {selectedTags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800"
+                  >
+                    {tag}
+                    <button
+                      onClick={() => setSelectedTags([])}
+                      className="ml-2 text-blue-800 hover:text-blue-900 focus:outline-none"
+                    >
+                      ✖
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
 
           {/* <SEOSettings
             seoTitle={seoData.seoTitle}

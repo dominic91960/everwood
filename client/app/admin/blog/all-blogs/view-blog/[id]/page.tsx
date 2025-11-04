@@ -71,42 +71,69 @@ export default function QuillEditor() {
     },
     formats: [
       "header", "bold", "italic", "underline", "strike", "blockquote",
-      "code-block", "list", "bullet", "indent", "link", "image", "video",
+      "code-block", "list", "indent", "link", "image", "video",
       "color", "background", "script", "font", "size", "align", "direction"
     ]
   });
 
-  // Populate from sessionStorage when navigated from table
+  // Fetch blog data from API and populate from sessionStorage
   useEffect(() => {
-    try {
-      if (typeof window !== "undefined") {
-        const raw = window.sessionStorage.getItem("selectedBlog");
-        if (raw) {
-          const b = JSON.parse(raw) as { title?: string; content?: string; thumbnailImage?: string; date?: string };
-          setTitle(b.title || "");
-          setContent(b.content || "");
-          setThumbnailUrl(b.thumbnailImage || "");
-          const rawDate = b.date || "";
-          let normalizedDate = "";
-          if (rawDate) {
-            // If already in yyyy-mm-dd keep as is; otherwise try to parse
-            const yyyyMmDdRegex = /^\d{4}-\d{2}-\d{2}$/;
-            if (yyyyMmDdRegex.test(rawDate)) {
-              normalizedDate = rawDate;
-            } else {
-              const parsed = new Date(rawDate);
-              if (!isNaN(parsed.getTime())) {
-                normalizedDate = parsed.toISOString().split("T")[0];
+    const fetchBlogData = async () => {
+      if (!contentId) return;
+      
+      try {
+        // Fetch from API first to get all data including tags
+        const blogData = await api.content.getById(contentId);
+        setTitle(blogData.title || "");
+        setContent(blogData.content || "");
+        setThumbnailUrl(blogData.thumbnail || "");
+        setSelectedTags(blogData.tags || []);
+        setSelectedCategories(blogData.categories || []);
+        setMode(blogData.mode || "DRAFT");
+        
+        if (blogData.time) {
+          const date = new Date(blogData.time);
+          if (!isNaN(date.getTime())) {
+            setBlogDate(date.toISOString().split("T")[0]);
+          }
+        }
+        
+        if (blogData.seoTitle) setSeoData(prev => ({ ...prev, seoTitle: blogData.seoTitle }));
+        if (blogData.metaDescription) setSeoData(prev => ({ ...prev, metaDescription: blogData.metaDescription }));
+        if (blogData.metaKeywords) setSeoData(prev => ({ ...prev, metaKeywords: blogData.metaKeywords }));
+      } catch (error) {
+        console.error("Failed to fetch blog data:", error);
+        // Fallback to sessionStorage if API fails
+        try {
+          if (typeof window !== "undefined") {
+            const raw = window.sessionStorage.getItem("selectedBlog");
+            if (raw) {
+              const b = JSON.parse(raw) as { title?: string; content?: string; thumbnailImage?: string; date?: string };
+              setTitle(b.title || "");
+              setContent(b.content || "");
+              setThumbnailUrl(b.thumbnailImage || "");
+              const rawDate = b.date || "";
+              let normalizedDate = "";
+              if (rawDate) {
+                const yyyyMmDdRegex = /^\d{4}-\d{2}-\d{2}$/;
+                if (yyyyMmDdRegex.test(rawDate)) {
+                  normalizedDate = rawDate;
+                } else {
+                  const parsed = new Date(rawDate);
+                  if (!isNaN(parsed.getTime())) {
+                    normalizedDate = parsed.toISOString().split("T")[0];
+                  }
+                }
               }
+              setBlogDate(normalizedDate);
             }
           }
-          setBlogDate(normalizedDate);
-        }
+        } catch {}
       }
-    } catch {}
-  }, []);
+    };
 
-  // No backend fetching
+    fetchBlogData();
+  }, [contentId]);
 
   // Ensure Quill editor always displays the content
   useEffect(() => {
@@ -268,14 +295,68 @@ export default function QuillEditor() {
           {/* <CategoryInput
             onCategoriesChange={setSelectedCategories}
             initialCategories={selectedCategories}
-          />
-
-          <TagInput
-            onTagsChange={setSelectedTags}
-            initialTags={selectedTags}
-            placeholder="Add tags..."
-            isEdit={false}
           /> */}
+
+          {/* Tag Display/Edit */}
+          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">Tags</h2>
+            {isEdit ? (
+              <div>
+                <select
+                  value={selectedTags[0] || ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value) {
+                      setSelectedTags([value]);
+                    } else {
+                      setSelectedTags([]);
+                    }
+                  }}
+                  className="w-full rounded-3xl border p-1 bg-transparent border-[#4796A9] pl-[3%] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select a tag</option>
+                  <option value="Living">Living</option>
+                  <option value="Bedroom">Bedroom</option>
+                  <option value="Wardrobes">Wardrobes</option>
+                </select>
+                {selectedTags.length > 0 && (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {selectedTags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800"
+                      >
+                        {tag}
+                        <button
+                          onClick={() => setSelectedTags([])}
+                          className="ml-2 text-blue-800 hover:text-blue-900 focus:outline-none"
+                        >
+                          ✖
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                {selectedTags.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {selectedTags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="inline-block bg-blue-200 text-blue-800 text-sm font-medium px-3 py-1 rounded-full"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500">No tags available</p>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* <SEOSettings
             seoTitle={seoData.seoTitle}
