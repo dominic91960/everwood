@@ -71,7 +71,7 @@ function ComingSoon() {
                   />
                 </a>
                 <a
-                  href="#"
+                  href="https://web.facebook.com/everwoodcollection?_rdc=1&_rdr#"
                   className="w-10 h-10 bg-[#F5F5F5] rounded-full flex items-center justify-center hover:scale-105 hover:bg-[#475158] transition-all duration-300 group"
                 >
                   <Image
