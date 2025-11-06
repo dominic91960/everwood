@@ -83,7 +83,7 @@ function page() {
                         <Image src={Blog3} alt="Blog" className="w-full h-auto" />
                     </div>
                 </div>
-                <BlogComponent />
+                <BlogComponent selectedCategory={activeCategory} />
 
                 <div className='margin-y relative'>
                     <Image src="/image/Blog/Blog.png" alt="Section06" width={1920} height={500} className='w-full h-[400px] object-cover rounded-[36px]' />
