@@ -140,7 +140,9 @@ function Form() {
                     />
                   </a>
                   <a
-                    href="#"
+                    href="https://www.instagram.com/everwood.collection"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-10 h-10 flex items-center justify-center hover:scale-105 "
                   >
                     <Image
@@ -152,7 +154,9 @@ function Form() {
                     />
                   </a>
                   <a
-                    href="#"
+                    href="https://www.facebook.com/everwoodcollection"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-10 h-10  flex items-center justify-center hover:scale-105 "
                   >
                     <Image
