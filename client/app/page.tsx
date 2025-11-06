@@ -18,15 +18,44 @@ export default function Home() {
     <div>
       <Navbar2 />
       <div className=" py-20 containerpaddin container mx-auto ">
+
         <Section01 />
         <Section02 />
-        <Section03 />
-        <Section04 />
-        <Section05 />
-        <Section06 />
-        <Section07 />
-        <Section08 />
-        <Section09 />
+        <div data-aos="fade-up"
+          data-aos-delay="100"
+          data-aos-duration="2000">
+          <Section03 />
+        </div>
+        <div data-aos="fade-up"
+          data-aos-delay="100"
+          data-aos-duration="2000">
+          <Section04 />
+        </div>
+        <div data-aos="fade-up"
+          data-aos-delay="100"
+          data-aos-duration="2000">
+          <Section05 />
+        </div>
+        <div data-aos="fade-up"
+          data-aos-delay="100"
+          data-aos-duration="2000">
+          <Section06 />
+        </div>
+        <div data-aos="fade-up"
+          data-aos-delay="100"
+          data-aos-duration="2000">
+          <Section07 />
+        </div>
+        <div data-aos="fade-up"
+          data-aos-delay="100"
+          data-aos-duration="2000">
+          <Section08 />
+        </div>
+        <div data-aos="fade-up"
+          data-aos-delay="100"
+          data-aos-duration="2000">
+          <Section09 />
+        </div>
       </div>
       <Footer />
     </div>

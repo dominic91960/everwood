@@ -1,10 +1,39 @@
-import React from 'react'
+'use client'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Bookacall from '../Buttons/bookacall'
 import Tooltip from '../Tooltip/Tooltip'
+
+const carouselImages = [
+    '/image/Home/Herosub1k.png',
+    '/image/Home/Herosub2kk.png',
+    '/image/Home/Herosub1k.png',
+    '/image/Home/Herosub2kk.png'
+]
+
 function Section02() {
+    const [currentSlide, setCurrentSlide] = useState(0)
+
+    // Auto-play carousel
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentSlide((prev) => (prev >= carouselImages.length - 2 ? 0 : prev + 1))
+        }, 3000) // Change slide every 3 seconds
+
+        return () => clearInterval(interval)
+    }, [])
+
+    const handlePrevious = () => {
+        setCurrentSlide((prev) => (prev === 0 ? carouselImages.length - 2 : prev - 1))
+    }
+
+    const handleNext = () => {
+        setCurrentSlide((prev) => (prev >= carouselImages.length - 2 ? 0 : prev + 1))
+    }
     return (
-        <div className='margin-y'>
+        <div data-aos="fade-up"
+        data-aos-delay="300"
+        data-aos-duration="2000" className='margin-y'>
             {/* Mobile: show tooltip block at the very top */}
             <div className='flex sm:hidden mb-2 w-full flex-col items-center justify-center text-center'>
                 <Tooltip />
@@ -34,32 +63,46 @@ function Section02() {
 
                 <div className='col-span-2 flex flex-col justify-between gap-4'>
                     <div className='w-full'>
-                        <Image src="/image/Home/Hero2nd.png" alt="Section02" width={1920} height={500} className='w-full h-full object-cover' />
+                        <video 
+                            src="/image/Home/Herovideo.mp4" 
+                            autoPlay 
+                            loop 
+                            muted 
+                            playsInline
+                            className='w-full h-full object-cover rounded-lg'
+                        />
                     </div>
 
-                    <div className='text-[14px] sm:text-[15px] md:text-[16px] lg:text-[12px] xl:text-[20px] 2xl:text-[22px]'>
+                    <div className='text-[14px] sm:text-[15px] md:text-[16px] lg:text-[12px] xl:text-[14px] 2xl:text-[22px]'>
                         The Everwood Collection brings together modern design and masterful craftsmanship to create timeless pieces that transform your home.
                     </div>
                     <div className='flex flex-row items-center justify-between w-full'>
-                        <div className='description'>
+                        <button onClick={handlePrevious} className='description hover:opacity-70 transition-opacity'>
                             01
+                        </button>
+                        <div className='grid grid-cols-3 items-center justify-between gap-2'>
+                            {[0, 1, 2].map((index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => setCurrentSlide(index)}
+                                    className={`h-[2px] w-[70px] sm:w-[150px] md:w-[200px] lg:w-[100px] xl:w-[100px] 2xl:w-[150px] transition-colors ${
+                                        currentSlide === index ? 'bg-black' : 'bg-[#D9D9D9]'
+                                    }`}
+                                ></button>
+                            ))}
                         </div>
-                        <div className='grid grid-cols-3 items-center justify-between'>
-                            <div className='h-[2px] w-[70px] sm:w-[150px] md:w-[200px] lg:w-[100px] xl:w-[100px] 2xl:w-[150px]   bg-black '>
-                            </div>
-                            <div className='h-[2px] w-[70px] sm:w-[150px] md:w-[200px] lg:w-[100px] xl:w-[100px] 2xl:w-[150px]  bg-[#D9D9D9] '>
-                            </div>
-                            <div className='h-[2px] w-[70px] sm:w-[150px] md:w-[200px] lg:w-[100px] xl:w-[100px] 2xl:w-[150px]  bg-[#D9D9D9] '>
-                            </div>
-                        </div>
-                        <div className='description'>
+                        <button onClick={handleNext} className='description hover:opacity-70 transition-opacity'>
                             03
-                        </div>
+                        </button>
                     </div>
-                    <div className='flex flex-row gap-4 justify-between w-full overflow-hidden'>
-                        <Image src="/image/Home/Herosub1.png" alt="Section02" width={3920} height={1000} className='h-full w-auto object-cover' />
-                        <Image src="/image/Home/Herosub2.png" alt="Section02" width={3920} height={1000} className='h-full w-auto object-cover' />
-                        <Image src="/image/Home/Herosub2.png" alt="Section01" width={3920} height={1000} className='h-full w-auto object-cover' />
+                    <div className='relative w-full overflow-hidden'>
+                        <div className='flex transition-transform duration-700 ease-in-out' style={{ transform: `translateX(-${currentSlide * 50}%)` }}>
+                            {carouselImages.map((img, index) => (
+                                <div key={index} className='min-w-[50%] px-2'>
+                                    <Image src={img} alt={`Section02-${index}`} width={3920} height={1000} className='h-full w-full object-cover' />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
 

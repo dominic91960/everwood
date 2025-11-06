@@ -1,7 +1,27 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
 function Bring() {
+  const [displayedText, setDisplayedText] = useState("");
+  const fullText = "From concept to creation, we bring your ideas to life through timeless craft";
+  const typingSpeed = 50; // milliseconds per character
+
+  useEffect(() => {
+    let currentIndex = 0;
+    
+    const typingInterval = setInterval(() => {
+      if (currentIndex <= fullText.length) {
+        setDisplayedText(fullText.slice(0, currentIndex));
+        currentIndex++;
+      } else {
+        clearInterval(typingInterval);
+      }
+    }, typingSpeed);
+
+    return () => clearInterval(typingInterval);
+  }, []);
+
   return (
     <div className="margin-y">
       <div className="containerpaddin container mx-auto">
@@ -26,10 +46,10 @@ function Bring() {
               Create Something Truly Your Own
             </h2>
 
-            {/* Subtitle/Description */}
-            <p className="text-white text-[16px] sm:text-[18px] md:text-[22px] lg:text-[30px] 2xl:text-[36px] font-poppins max-w-6xl leading-relaxed">
-              From concept to creation, we bring your ideas to life through
-              timeless craft
+            {/* Subtitle/Description with Typewriter Effect */}
+            <p className="text-white text-[16px] sm:text-[18px] md:text-[22px] lg:text-[30px] 2xl:text-[36px] font-poppins max-w-6xl leading-relaxed min-h-[3em]">
+              {displayedText}
+              <span className="animate-pulse">|</span>
             </p>
           </div>
         </div>
