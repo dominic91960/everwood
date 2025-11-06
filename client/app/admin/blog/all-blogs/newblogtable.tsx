@@ -102,7 +102,7 @@ const AdminDashboardPage: React.FC = () => {
           <div className="grid gap-4 sm:mb-6 sm:items-center sm:justify-between  sm:gap-2 md:flex flex-wrap">
             <div>
               <h1 className="font-bold text-[28px] sm:text-[24px] md:text-[26px] lg:text-[28px] 2xl:text-[22px] ml-[10px]">
-                All News {loading ? '(Loading...)' : `(${blogs.length})`}
+                All Blogs {loading ? '(Loading...)' : `(${blogs.length})`}
               </h1>
             </div>
 

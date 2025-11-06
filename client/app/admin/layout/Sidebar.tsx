@@ -59,7 +59,7 @@ const Sidebar: React.FC = () => {
         >
           <div className="flex space-x-3 py-5 px-5">
             <h1 className=" xl:text-[20px] text-[14px] sm:text[16px] md:text-[20px] font-bold text-[#FFFFFF] ">
-            st-george-montessori
+            Ever Wood Collection 
 
             </h1>
           </div>
@@ -90,7 +90,7 @@ const Sidebar: React.FC = () => {
                 >
                   <div className="flex items-center space-x-4">
                     <FaPen className="text-[14px]" />
-                    <span>News</span>
+                    <span>Blog</span>
                   </div>
                   {isBlogOpen ? <IoMdArrowDropup /> : <IoMdArrowDropdown />}
                 </button>
@@ -102,14 +102,14 @@ const Sidebar: React.FC = () => {
                         }`}
                     >
                       <FaList className="text-[14px]" />
-                      <Link href="/admin/blog/all-blogs">All News</Link>
+                      <Link href="/admin/blog/all-blogs">All Blog</Link>
                     </li>
                     <li
                       className={`flex items-center space-x-3 px-6 py-2 rounded-3xl ${isActive("/admin/blog/add-blog") ? "bg-[#2CAB6D] text-white" : ""
                         }`}
                     >
                       <FaPlus className="text-[14px]" />
-                      <Link href="/admin/blog/add-blog">Add News</Link>
+                      <Link href="/admin/blog/add-blog">Add Blog</Link>
                     </li>
                     {/* <li className={`flex items-center space-x-3 px-6 py-2 rounded-3xl ${isActive("/admin/blog/blog-categories") ? "bg-[#2CAB6D] text-white" : ""}`}>
                       <FaTags className="text-[14px]" />

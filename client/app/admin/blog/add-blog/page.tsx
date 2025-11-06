@@ -208,8 +208,8 @@ function QuillEditor() {
           )}
 
           <div className="rounded-3xl bg-white p-6 shadow-sm">
-            <h1 className="mb-8 font-bold text-[22px] text-[#201F31]">Add News & Update</h1>
-            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">News Title</h2>
+            <h1 className="mb-8 font-bold text-[22px] text-[#201F31]">Add blog & Update</h1>
+            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">Blog Title</h2>
             <input
               type="text"
               value={title}
