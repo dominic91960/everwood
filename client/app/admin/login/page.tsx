@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/lib/firebase'
@@ -158,13 +159,15 @@ function LoginPage() {
                 />
                 <span className="ml-2 text-sm text-gray-600">Remember me</span>
               </label>
-              <a
-                href="#"
+            </div> */}
+            <div className="flex justify-end">
+              <Link
+                href="/admin/login/forgot-password"
                 className="text-sm text-button hover:text-[#475158] transition-colors"
               >
                 Forgot password?
-              </a>
-            </div> */}
+              </Link>
+            </div>
 
             {/* Submit Button */}
             <button

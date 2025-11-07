@@ -14,6 +14,8 @@ export default function RootLayout({
   const pathname = usePathname()
   const router = useRouter()
   const isLoginPage = pathname === '/admin/login'
+  const isForgotPasswordPage = pathname === '/admin/login/forgot-password'
+  const isPublicPage = isLoginPage || isForgotPasswordPage
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -22,8 +24,8 @@ export default function RootLayout({
       setUser(currentUser)
       setLoading(false)
 
-      // Don't redirect if already on login page
-      if (isLoginPage) {
+      // Don't redirect if on public pages (login or forgot password)
+      if (isPublicPage) {
         return
       }
 
@@ -34,10 +36,10 @@ export default function RootLayout({
     })
 
     return () => unsubscribe()
-  }, [pathname, router, isLoginPage])
+  }, [pathname, router, isPublicPage])
 
-  // Don't render sidebar/navbar on login page
-  if (isLoginPage) {
+  // Don't render sidebar/navbar on public pages (login or forgot password)
+  if (isPublicPage) {
     return <>{children}</>
   }
 
