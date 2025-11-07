@@ -1,10 +1,28 @@
 "use client"; // This tells Next.js it's a client component
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { Monitor, Users } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 const Navbar = () => {
   const [admissionCount, setAdmissionCount] = useState<number | null>(null);
   const [studentCount, setStudentCount] = useState<number | null>(null);
+  const [userEmail, setUserEmail] = useState<string>('');
+  const [userInitial, setUserInitial] = useState<string>('A');
+  const router = useRouter();
+
+  useEffect(() => {
+    // Listen to authentication state
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user && user.email) {
+        setUserEmail(user.email);
+        setUserInitial(user.email.charAt(0).toUpperCase());
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const fetchCounts = () => {
@@ -35,6 +53,10 @@ const Navbar = () => {
       window.removeEventListener('studentCountChanged', fetchCounts);
     };
   }, []);
+
+  const handleProfileClick = () => {
+    router.push('/admin/profile');
+  };
   
   return (
     <div className=" ">
@@ -46,12 +68,16 @@ const Navbar = () => {
         </div>
         <div className="flex items-center space-x-3">
           <div className="text-right hidden sm:block">
-            <p className="text-sm text-gray-600">admin@furniture.com</p>
+            <p className="text-sm text-gray-600">{userEmail || 'admin@furniture.com'}</p>
             <p className="text-xs text-gray-500">Administrator</p>
           </div>
-          <div className="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center">
-            <span className="text-white font-semibold text-lg">A</span>
-          </div>
+          <button 
+            onClick={handleProfileClick}
+            className="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center hover:bg-indigo-700 transition-colors cursor-pointer"
+            title="View Profile"
+          >
+            <span className="text-white font-semibold text-lg">{userInitial}</span>
+          </button>
         </div>
       </div>
 

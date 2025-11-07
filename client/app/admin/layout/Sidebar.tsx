@@ -202,6 +202,13 @@ const Sidebar: React.FC = () => {
                 <FaUser className="xl:text-[14px] text-[12px]" />
                 <Link href="/admin/Profile">Profile</Link>
               </li> */}
+              <li
+                className={`flex items-center space-x-4 px-6 py-2 rounded-3xl ${isActive("/admin/profile") ? "bg-[#2CAB6D] text-white" : ""
+                  }`}
+              >
+                <FaUser className="xl:text-[14px] text-[12px]" />
+                <Link href="/admin/profile">Profile</Link>
+              </li>
               <li>
                 <button
                   onClick={handleLogout}
