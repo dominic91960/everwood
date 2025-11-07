@@ -4,7 +4,7 @@ import CtLogo from "../component/contact/ctlogo";
 import Seamless from "../component/contact/seamless";
 import Form from "../component/contact/form";
 import Create from "../component/contact/create";
-import Footer from "../component/Footer/Footer";
+import Footer2 from "../component/Footer/Footer2";
 function page() {
   return (
     <div>
@@ -17,7 +17,7 @@ function page() {
       <Seamless />
       <Form />
       <Create />
-      <Footer />
+      <Footer2 />
     </div>
   );
 }

@@ -8,7 +8,7 @@ import Section01 from "./component/Home/Section01";
 import Section02 from "./component/Home/Section02";
 import { Navbar2 } from "./component/Navbar/Navbar2";
 import Section09 from "./component/Home/Section09";
-import Footer from "./component/Footer/Footer";
+import Footer2 from "./component/Footer/Footer2";
 export default function Home() {
   return (
     <div>
@@ -53,7 +53,7 @@ export default function Home() {
           <Section09 />
         </div>
       </div>
-      <Footer />
+      <Footer2 />
     </div>
   );
 }

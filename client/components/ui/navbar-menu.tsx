@@ -15,30 +15,43 @@ export const MenuItem = ({
   active,
   item,
   children,
+  isActive,
+  href,
 }: {
   setActive: (item: string) => void;
   active: string | null;
   item: string;
   children?: React.ReactNode;
+  isActive?: boolean;
+  href?: string;
 }) => {
+  const content = (
+    <motion.p
+      transition={{ duration: 0.3 }}
+      className={`cursor-pointer hover:text-black transition-colors dark:text-white ${isActive ? 'text-black font-bold' : 'text-gray-600'}`}
+    >
+      {item}
+    </motion.p>
+  );
+
   return (
     <div onMouseEnter={() => setActive(item)} className="relative ">
-      <motion.p
-        transition={{ duration: 0.3 }}
-        className="cursor-pointer text-black hover:opacity-[0.9] dark:text-white"
-      >
-        {item}
-      </motion.p>
+      {href ? (
+        <a href={href}>{content}</a>
+      ) : (
+        content
+      )}
       {active !== null && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.85, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={transition}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
         >
           {active === item && (
             <div className="absolute top-[calc(100%_+_1.2rem)] left-1/2 transform -translate-x-1/2 pt-4">
               <motion.div
-                transition={transition}
+                transition={{ duration: 0.2, ease: "easeOut" }}
                 layoutId="active" // layoutId ensures smooth animation
                 className="bg-white dark:bg-black backdrop-blur-sm rounded-2xl overflow-hidden border border-black/[0.2] dark:border-white/[0.2] shadow-xl"
               >
@@ -60,14 +73,16 @@ export const MenuItem = ({
 export const Menu = ({
   setActive,
   children,
+  className,
 }: {
   setActive: (item: string | null) => void;
   children: React.ReactNode;
+  className?: string;
 }) => {
   return (
     <nav
       onMouseLeave={() => setActive(null)} // resets the state
-      className="relative rounded-full border border-transparent dark:bg-black dark:border-white/[0.2] bg-white shadow-input flex justify-center space-x-4 px-8 py-6 "
+      className={`relative rounded-full border border-transparent dark:bg-black dark:border-white/[0.2] bg-white shadow-input flex justify-center space-x-4 px-8 py-6 ${className || ''}`}
     >
       {children}
     </nav>

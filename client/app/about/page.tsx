@@ -5,7 +5,7 @@ import Build2 from "../component/About/build2";
 import Craft from "../component/About/craft";
 import Consult from "../component/About/consult";
 import Bring from "../component/About/bring";
-import Footer from "../component/Footer/Footer";
+import Footer2 from "../component/Footer/Footer2";
 function page() {
   return (
     <div>
@@ -18,7 +18,7 @@ function page() {
       {/* <From /> */}
       <Consult />
       <Bring />
-      <Footer />
+      <Footer2 />
     </div>
   );
 }

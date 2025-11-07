@@ -27,31 +27,10 @@ function ComingSoon() {
               </h1>
 
               {/* Description */}
-              <p className="description text-text/70 font-poppins leading-relaxed max-w-xl">
-                We're handcrafting a new collection of bespoke furniture pieces
-                that will elevate your living space. Each design is carefully
-                created with sustainably sourced wood and expert craftsmanship.
-              </p>
+              
 
               {/* Countdown or Email Subscription */}
-              <div className="flex flex-col gap-4 mt-4">
-                {/* Email Input */}
-                <div className="flex flex-col sm:flex-row gap-3 max-w-xl">
-                  <div className="relative flex-1">
-                    <input
-                      type="email"
-                      placeholder="Enter your email"
-                      className="w-full px-6 py-4 bg-[#F5F5F5] rounded-full border-none focus:outline-none focus:ring-2 focus:ring-[#475158]/20 font-poppins text-base"
-                    />
-                  </div>
-                  <button className="group bg-[#475158] text-white rounded-full px-8 py-4 font-poppins description transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-opacity-90 whitespace-nowrap">
-                    Notify Me
-                  </button>
-                </div>
-                <p className="small-text text-[#0C0C0C80] font-poppins">
-                  Be the first to know when we launch our new collection
-                </p>
-              </div>
+              
 
               {/* Social Media Links */}
               <div className="flex flex-row gap-4 items-center mt-4">

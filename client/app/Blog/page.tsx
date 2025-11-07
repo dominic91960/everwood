@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-import Footer from '../component/Footer/Footer'
+import Footer2 from '../component/Footer/Footer2'
 import { Navbar2 } from '../component/Navbar/Navbar2'
 import Image from 'next/image'
 import Blog3 from '@/public/image/Blog/Blog3.png'
@@ -99,7 +99,7 @@ function Page() {
                 </div>
 
             </div>
-            <Footer />
+            <Footer2 />
         </div>
     )
 }

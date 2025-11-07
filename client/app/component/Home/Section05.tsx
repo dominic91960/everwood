@@ -4,15 +4,9 @@ import React from 'react'
 function Section05() {
     return (
         <div className='margin-y'>
-            <div className="small-text ">
-                About us
-            </div>
-            <div className="lg:flex flex-row items-center justify-between gap-4">
-                <div className="subtitle text-left">
-                    Where Craft Meets <span className="hidden lg:block" /> Precision
-                </div>
-                <div className="description w-auto ">
-                    Founded in 2025, The Everwood Collection was born from a shared passion for <span className="hidden lg:block" /> craftsmanship, timeless design, and the belief that furniture should be as unique as  <span className="hidden lg:block" /> the homes it inhabits.
+            <div>
+                <div className="title flex items-center justify-center ">
+                    Bespoke Mode to Order
                 </div>
             </div>
             <div className='margin-y grid grid-cols-1 lg:grid-cols-3 gap-4'>

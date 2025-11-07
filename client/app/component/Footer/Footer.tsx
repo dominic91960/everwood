@@ -35,22 +35,16 @@ function Footer() {
                 About
               </Link>
               <Link
-                href="/Collection"
+                href="/Catalog"
                 className="text-white hover:text-gray-400 transition-colors duration-200 font-medium text-sm md:text-base"
-              >
-                Collection
+                >
+                  Catalog
               </Link>
               <Link
                 href="/designyourown"
                 className="text-white hover:text-gray-400 transition-colors duration-200 font-medium text-sm md:text-base"
               >
                 Design Your Own
-              </Link>
-              <Link
-                href="/appointment"
-                className="text-white hover:text-gray-400 transition-colors duration-200 font-medium text-sm md:text-base"
-              >
-                Appointment
               </Link>
               <Link
                 href="/Blog"

@@ -1,6 +1,7 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 
-import Footer from '../component/Footer/Footer'
+import Footer2 from '../component/Footer/Footer2'
 import Image from 'next/image'
 import Collection1 from '@/public/image/Collection/Collection1.png'
 import Collection2 from '@/public/image/Collection/Collection2.png'
@@ -10,6 +11,7 @@ import Section08 from '../component/Home/Section08'
 import { Navbar2 } from '../component/Navbar/Navbar2'
 
 function page() {
+    const [activeCategory, setActiveCategory] = useState('All')
     return (
         <div>
             <Navbar2 />
@@ -56,22 +58,59 @@ function page() {
                     data-aos-delay="100"
                     data-aos-duration="2000">
                     <div className='margin-y'>
-
-                        <div className="small-text">
-                            Our Collections
-                        </div>
                         <div className="lg:flex flex-row items-center justify-between gap-4">
                             <div className="subtitle text-left">
                                 Curated Collections
                             </div>
-
+                            <div className='flex flex-row gap-2 md:gap-4 w-full lg:w-auto mt-4 lg:mt-0 overflow-x-auto scrollbar-hide'>
+                                <button 
+                                    onClick={() => setActiveCategory('All')}
+                                    className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                                        activeCategory === 'All' 
+                                            ? 'bg-button text-white' 
+                                            : 'text-button hover:bg-button hover:text-white'
+                                    }`}
+                                >
+                                    All
+                                </button>
+                                <button 
+                                    onClick={() => setActiveCategory('Living')}
+                                    className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                                        activeCategory === 'Living' 
+                                            ? 'bg-button text-white' 
+                                            : 'text-button hover:bg-button hover:text-white'
+                                    }`}
+                                >
+                                    Living
+                                </button>
+                                <button 
+                                    onClick={() => setActiveCategory('Bedroom')}
+                                    className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                                        activeCategory === 'Bedroom' 
+                                            ? 'bg-button text-white' 
+                                            : 'text-button hover:bg-button hover:text-white'
+                                    }`}
+                                >
+                                    Bedroom
+                                </button>
+                                <button 
+                                    onClick={() => setActiveCategory('Wardrobes')}
+                                    className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                                        activeCategory === 'Wardrobes' 
+                                            ? 'bg-button text-white' 
+                                            : 'text-button hover:bg-button hover:text-white'
+                                    }`}
+                                >
+                                    Wardrobes
+                                </button>
+                            </div>
                         </div>
                         <Section08 />
                     </div>
                     </div>
                 </div>
             </div>
-            <Footer />
+            <Footer2 />
         </div>
     )
 }
