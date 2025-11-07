@@ -11,7 +11,7 @@ function Form() {
             data-aos="fade-up"
             data-aos-duration="3000"
             data-aos-delay="100"
-            className="flex flex-col order-2 lg:order-1"
+            className="flex flex-col pt-0 xl:pt-8 order-2 lg:order-1"
           >
             {/* Form Fields */}
             <form className="flex flex-col gap-4">
@@ -119,7 +119,7 @@ function Form() {
                         alt="arrow-right"
                         width={50}
                         height={50}
-                        className="w-[40px] h-[40px] sm:w-[45px] sm:h-[45px] md:w-[50px] md:h-[50px] lg:w-[30px] lg:h-[30px] xl:w-[40px] xl:h-[40px] 2xl:w-[55px] 2xl:h-[55px]"
+                        className="w-[40px] h-[40px] sm:w-[45px] sm:h-[45px] md:w-[50px] md:h-[50px] lg:w-[30px] lg:h-[30px] xl:w-[40px] xl:h-[40px] 2xl:w-[55px] 2xl:h-[50px]"
                       />
                     </div>
                   </div>
@@ -200,7 +200,7 @@ function Form() {
                 alt="Contemporary Dining Area"
                 width={600}
                 height={400}
-                className="w-full h-auto rounded-lg object-cover"
+                className="w-full  rounded-lg object-cover"
               />
             </div>
           </div>

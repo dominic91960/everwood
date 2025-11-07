@@ -64,7 +64,7 @@ function Build2() {
             <>
               {/* Mobile/SM: visible, full width */}
               <div className="py-4 lg:py-0 md:hidden w-full">
-                <Link href="/Collection">
+                <Link href="/Catalog">
                   <button className="w-full group bg-[#475158] text-white rounded-full transition-all duration-300 hover:scale-[1.01] hover:bg-opacity-90">
                     <div className="flex items-center w-full">
                       <div className="text-white description px-4 flex-1 text-center font-poppins">
@@ -86,10 +86,10 @@ function Build2() {
 
               {/* MD and up: original button */}
               <div className="py-4 lg:py-0 hidden md:block">
-                <Link href="/Collection">
-                  <button className="group md:mb-0 lg:mb-4 bg-[#475158] text-white rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-opacity-90">
+                <Link href="/Catalog">
+                  <button className="group md:mb-0 bg-[#475158] text-white rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-opacity-90">
                     <div className="flex flex-row items-center justify-center">
-                      <div className="text-white description sm:px-3 md:px-5 lg:px-2 xl:px-3 2xl:px-4 font-poppins">
+                      <div className="text-white description sm:px-3 md:px-5 lg:px-2 xl:px-2 2xl:px-4 font-poppins">
                         Our Collection
                       </div>
                       <div className="text-white text-sm pr-1 py-1">
@@ -98,7 +98,7 @@ function Build2() {
                           alt="arrow-right"
                           width={50}
                           height={50}
-                          className="w-[40px] h-[40px] sm:w-[45px] sm:h-[45px] md:w-[50px] md:h-[50px] lg:w-[30px] lg:h-[30px] xl:w-[40px] xl:h-[40px] 2xl:w-[55px] 2xl:h-[55px]"
+                          className="w-[40px] h-[40px] sm:w-[45px] sm:h-[45px] md:w-[50px] md:h-[50px] lg:w-[30px] lg:h-[30px] xl:w-[40px] xl:h-[40px] 2xl:w-[45px] 2xl:h-[45px]"
                         />
                       </div>
                     </div>
