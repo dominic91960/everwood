@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { AiOutlineClose } from "react-icons/ai";
 import {
   FaTachometerAlt,
@@ -17,6 +18,8 @@ import { usePathname } from "next/navigation";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,10 +27,16 @@ const Sidebar: React.FC = () => {
   const [isBlogOpen, setIsBlogOpen] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const isActive = (path: string): boolean => pathname === path;
 
-  const handleLogout = () => {
-    console.log('Logout clicked');
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      router.push('/admin/login');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   return (
@@ -193,7 +202,7 @@ const Sidebar: React.FC = () => {
                 <FaUser className="xl:text-[14px] text-[12px]" />
                 <Link href="/admin/Profile">Profile</Link>
               </li> */}
-              {/* <li>
+              <li>
                 <button
                   onClick={handleLogout}
                   className="flex items-center space-x-4 px-6 py-2 rounded-3xl w-full text-left hover:bg-red-600 hover:text-white transition-colors"
@@ -201,7 +210,7 @@ const Sidebar: React.FC = () => {
                   <FiLogOut className="xl:text-[14px] text-[12px]" />
                   <span>Log out</span>
                 </button>
-              </li> */}
+              </li>
             </ul>
           </nav>
         </div>

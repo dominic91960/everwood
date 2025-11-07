@@ -2,35 +2,41 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
+import { auth } from '@/lib/firebase'
 
 function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
   // Redirect to admin if already authenticated
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const isAuthenticated = localStorage.getItem('admin_authenticated') === 'true'
-      if (isAuthenticated) {
+    const unsubscribe = onAuthStateChanged(auth, (user: any) => {
+      if (user) {
         router.push('/admin')
       }
-    }
+    })
+
+    return () => unsubscribe()
   }, [router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError(null)
     
-    // TODO: Add backend authentication logic here
-    // For now, just simulate a delay and redirect
-    setTimeout(() => {
-      // Store login state in localStorage (temporary solution until backend is ready)
-      localStorage.setItem('admin_authenticated', 'true')
+    try {
+      await signInWithEmailAndPassword(auth, email, password)
+      // User will be redirected by the onAuthStateChanged listener
       router.push('/admin')
+    } catch (err: any) {
+      console.error('Login error:', err)
+      setError(err.message || 'Failed to sign in. Please check your credentials.')
       setIsLoading(false)
-    }, 1000)
+    }
   }
 
   return (
@@ -46,6 +52,11 @@ function LoginPage() {
 
         {/* Login Form Card */}
         <div className="bg-white rounded-2xl shadow-lg p-8 sm:p-10">
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-sm text-red-600">{error}</p>
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
             <div className="relative">
@@ -101,13 +112,13 @@ function LoginPage() {
               <label className="flex items-center">
                 <input
                   type="checkbox"
-                  className="w-4 h-4 text-[#2B2E32] bg-[#F5F5F5] border-gray-300 rounded focus:ring-2 focus:ring-[#475158]/20"
+                  className="w-4 h-4 text-button bg-[#F5F5F5] border-gray-300 rounded focus:ring-2 focus:ring-[#475158]/20"
                 />
                 <span className="ml-2 text-sm text-gray-600">Remember me</span>
               </label>
               <a
                 href="#"
-                className="text-sm text-[#2B2E32] hover:text-[#475158] transition-colors"
+                className="text-sm text-button hover:text-[#475158] transition-colors"
               >
                 Forgot password?
               </a>
@@ -117,20 +128,20 @@ function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full group bg-[#2B2E32] text-white rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              className="w-full group bg-button text-white rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
-              <div className="flex flex-row items-center justify-center py-3">
-                <div className="text-white description px-4 font-poppins">
+              <div className="flex flex-row items-center justify-center">
+                <div className="text-white description px-4 sm:px-3 md:px-5 lg:px-2 xl:px-3 2xl:px-4 font-poppins">
                   {isLoading ? 'Logging in...' : 'Login'}
                 </div>
                 {!isLoading && (
-                  <div className="text-white text-sm pr-1">
+                  <div className="text-white text-sm pr-1 py-1">
                     <img
                       src="/image/Icon/Buttonicon.png"
                       alt="arrow-right"
                       width={50}
                       height={50}
-                      className="w-[40px] h-[40px]"
+                      className="w-[40px] h-[40px] sm:w-[45px] sm:h-[45px] md:w-[50px] md:h-[50px] lg:w-[30px] lg:h-[30px] xl:w-[40px] xl:h-[40px] 2xl:w-[55px] 2xl:h-[55px]"
                     />
                   </div>
                 )}

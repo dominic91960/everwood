@@ -1,6 +1,8 @@
 'use client'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
+import { onAuthStateChanged, User } from 'firebase/auth'
+import { auth } from '@/lib/firebase'
 import Sidebar from "./layout/Sidebar";
 import Navbar from "./layout/Navbar";
 
@@ -12,22 +14,26 @@ export default function RootLayout({
   const pathname = usePathname()
   const router = useRouter()
   const isLoginPage = pathname === '/admin/login'
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Don't redirect if already on login page
-    if (isLoginPage) {
-      return
-    }
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser)
+      setLoading(false)
 
-    // Check authentication status
-    const isAuthenticated = typeof window !== 'undefined' 
-      ? localStorage.getItem('admin_authenticated') === 'true'
-      : false
+      // Don't redirect if already on login page
+      if (isLoginPage) {
+        return
+      }
 
-    // Redirect to login if not authenticated
-    if (!isAuthenticated) {
-      router.push('/admin/login')
-    }
+      // Redirect to login if not authenticated
+      if (!currentUser) {
+        router.push('/admin/login')
+      }
+    })
+
+    return () => unsubscribe()
   }, [pathname, router, isLoginPage])
 
   // Don't render sidebar/navbar on login page
@@ -35,9 +41,21 @@ export default function RootLayout({
     return <>{children}</>
   }
 
-  // Check authentication before rendering admin layout
-  if (typeof window !== 'undefined' && localStorage.getItem('admin_authenticated') !== 'true') {
-    return null // Will redirect via useEffect
+  // Show loading state while checking authentication
+  if (loading) {
+    return (
+      <div className="flex min-h-screen w-full bg-[#F8F8F6] font-poppins items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-button"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Redirect to login if not authenticated (will be handled by useEffect, but prevent rendering)
+  if (!user) {
+    return null
   }
 
   return (
