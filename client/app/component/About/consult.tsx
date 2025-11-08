@@ -118,10 +118,11 @@ function Consult() {
               01
             </div>
             <div className="text-[18px] md:text-[20px] xl:text-[26px] 2xl:text-[28px] font-semibold font-poppins">
-              Consultation
+              The Consultation
             </div>
             <div className="description text-[#0C0C0C] font-poppins leading-relaxed">
-              We begin with your story — your style, needs, and vision
+              The Everwood Collection transforms your ideas into elegant,
+              practical designs tailored to Colombo’s style and climate.
             </div>
           </div>
 
@@ -145,11 +146,11 @@ function Consult() {
               02
             </div>
             <div className="text-[18px] md:text-[20px] xl:text-[26px] 2xl:text-[28px] font-semibold font-poppins">
-              Design Blueprint
+              Material & Selection
             </div>
             <div className="description text-[#0C0C0C] font-poppins leading-relaxed">
-              Our designers translate your ideas into detailed sketches and
-              models.
+              Choose premium materials, finishes, and fabrics to craft furniture
+              with timeless beauty, character, and durability.
             </div>
           </div>
 
@@ -173,10 +174,11 @@ function Consult() {
               03
             </div>
             <div className="text-[18px] md:text-[20px] xl:text-[26px] 2xl:text-[28px] font-semibold font-poppins">
-              Artisan Production
+              Design & Quotation
             </div>
             <div className="description text-[#0C0C0C] font-poppins leading-relaxed">
-              Each piece is handcrafted using precision tools and techniques.
+              Finalize designs and materials with detailed quotations, ensuring
+              full transparency and approval before production begins.
             </div>
           </div>
 
@@ -200,11 +202,11 @@ function Consult() {
               04
             </div>
             <div className="text-[18px] md:text-[20px] xl:text-[26px] 2xl:text-[28px] font-semibold font-poppins">
-              Finishing Touches
+              The Crafting Process
             </div>
             <div className="description text-[#0C0C0C] font-poppins leading-relaxed">
-              We polish, inspect, and deliver a piece designed to last for
-              generations.
+              Skilled Sri Lankan artisans handcraft each piece with care,
+              ensuring flawless quality and timely delivery.
             </div>
           </div>
         </div>

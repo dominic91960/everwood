@@ -23,7 +23,7 @@ function Section01() {
     <div className="-mt-15 lg:mt-[-50px]">
       <div className="title text-center leading-tight font-poppins">
         <div className="reveal-text">
-          <span className="font-bold">The Everwood Collection</span>
+          <span className="font-semibold">The Everwood Collection</span>
         </div>
 
         <div className="h-[2px] w-4/5 lg:w-2/3 mx-auto bg-black  my-1"></div>

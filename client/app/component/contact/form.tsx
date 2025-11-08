@@ -111,7 +111,7 @@ function Form() {
                 >
                   <div className="flex flex-row items-center justify-center">
                     <div className="text-white description px-4 sm:px-3 md:px-5 lg:px-2 xl:px-3 2xl:px-4 font-poppins">
-                      Sent Your Message
+                      Send Message
                     </div>
                     <div className="text-white text-sm pr-1 py-1">
                       <img

@@ -9,7 +9,7 @@ function CtLogo() {
         data-aos-duration="3000"
         className="containerpaddin container mx-auto max-w-7xl"
       >
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 lg:gap-12">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 lg:gap-12">
           {/* Email Address Card */}
           <div className="flex flex-col items-center">
             <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#EBEBEB] flex items-center justify-center mb-4 hover:scale-110 transition-all duration-300">
@@ -25,7 +25,12 @@ function CtLogo() {
               Email Address
             </div>
             <div className="description text-[14px] sm:text-[15px] md:text-[16px] font-poppins text-[#878787]">
-              Example@gmail.com
+              <a
+                href="mailto:hello@everwodcollection.com"
+                className="description text-[14px] sm:text-[15px] md:text-[16px] font-poppins text-[#878787] hover:text-black transition-colors duration-300"
+              >
+                hello@everwodcollection.com
+              </a>
             </div>
           </div>
 
@@ -44,12 +49,17 @@ function CtLogo() {
               Contact Info
             </div>
             <div className="description text-[14px] sm:text-[15px] md:text-[16px] font-poppins text-[#878787]">
-              +76 3456523334
+              <a
+                href="tel:+7634565233334"
+                className="description text-[14px] sm:text-[15px] md:text-[16px] font-poppins text-[#878787] hover:text-black transition-colors duration-300"
+              >
+                +76 3456523334
+              </a>
             </div>
           </div>
 
           {/* Our Address Card */}
-          <div className="flex flex-col items-center">
+          {/* <div className="flex flex-col items-center">
             <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#EBEBEB] flex items-center justify-center mb-4 hover:scale-110 transition-all duration-300">
               <Image
                 src="/image/contact/ctloog/Location.png"
@@ -66,7 +76,7 @@ function CtLogo() {
               123, example, example road,
               <br className="hidden sm:block" /> example
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
