@@ -63,10 +63,10 @@ export const ActionCell = ({ row, handleDeleteBlog }: { row: { original: Blog },
   const handleClose = () => setOpen(false);
 
   return (
-    <div className="flex items-center gap-2 ml-[-10px]">
-      <Button variant="outline" onClick={() => handleViewClick(row.original.id)} className="!bg-transparent !border-none hover:!bg-transparent hover:!border-none"><RiEyeLine size={20} /></Button>
-      <Button variant="outline" onClick={() => handleEditClick(row.original.id)} className="!bg-transparent !border-none hover:!bg-transparent hover:!border-none"><RiEditLine size={20} /></Button>
-      <Button variant="outline" onClick={handleDeleteClick} className="!bg-transparent !border-none hover:!bg-transparent hover:!border-none"><RiDeleteBinLine size={20} /></Button>
+    <div className="flex flex-wrap items-center gap-2 ml-[-10px]">
+      <Button variant="outline" onClick={() => handleViewClick(row.original.id)} className="!bg-transparent !border-none hover:!bg-transparent hover:!border-none flex-shrink-0"><RiEyeLine size={20} /></Button>
+      <Button variant="outline" onClick={() => handleEditClick(row.original.id)} className="!bg-transparent !border-none hover:!bg-transparent hover:!border-none flex-shrink-0"><RiEditLine size={20} /></Button>
+      <Button variant="outline" onClick={handleDeleteClick} className="!bg-transparent !border-none hover:!bg-transparent hover:!border-none flex-shrink-0"><RiDeleteBinLine size={20} /></Button>
       <DeletePopup open={open} onClose={handleClose} onConfirm={handleConfirmDelete} loading={loading} />
     </div>
   );
