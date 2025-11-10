@@ -318,7 +318,7 @@ function Form() {
           <div className="grid grid-cols-2 md:grid-cols-2 gap-4 lg:gap-6 order-1 lg:order-2">
             {/* Top Image */}
             <div
-              data-aos="fade-left"
+              data-aos="fade-right"
               data-aos-duration="3000"
               className="w-full"
             >
@@ -333,7 +333,7 @@ function Form() {
 
             {/* Bottom Image */}
             <div
-              data-aos="fade-left"
+              data-aos="fade-right"
               data-aos-duration="3000"
               className="w-full"
             >

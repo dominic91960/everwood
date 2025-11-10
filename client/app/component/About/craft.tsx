@@ -36,7 +36,7 @@ function Craft() {
           <div className="flex gap-2 md:gap-4 w-full 2xl:w-[90%] h-[40vh] sm:h-[50vh] md:h-[50vh] lg:h-[70vh] xl:h-[50vh] 2xl:h-[50vh]">
             {/* Left Image  */}
             <div
-              data-aos="fade-left"
+              data-aos="fade-right"
               data-aos-duration="3000"
               className="relative flex-1"
             >
@@ -50,7 +50,7 @@ function Craft() {
 
             {/* Right Image  */}
             <div
-              data-aos="fade-left"
+              data-aos="fade-right"
               data-aos-duration="3000"
               className="relative flex-1"
             >
