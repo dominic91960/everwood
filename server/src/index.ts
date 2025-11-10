@@ -6,6 +6,7 @@ import { PrismaClient } from '@prisma/client';
 
 import contentRoutes from './content/routes';
 import contactRoutes from './contact/routes';
+import notifyRoutes from './notify/routes';
 
 // Load environment variables
 dotenv.config();
@@ -51,6 +52,9 @@ app.use('/contents', contentRoutes);
 
 // Register contact routes
 app.use('/api/contact', contactRoutes);
+
+// Register notify routes
+app.use('/api/notify', notifyRoutes);
 
 // Error handling middleware
 app.use((err: Error, _req: Request, res: Response, _next: any) => {
