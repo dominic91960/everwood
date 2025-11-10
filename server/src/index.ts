@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import { PrismaClient } from '@prisma/client';
 
 import contentRoutes from './content/routes';
+import contactRoutes from './contact/routes';
 
 // Load environment variables
 dotenv.config();
@@ -48,6 +49,8 @@ app.get('/api/test-db', async (_req: Request, res: Response) => {
 // Register content/blog routes
 app.use('/contents', contentRoutes);
 
+// Register contact routes
+app.use('/api/contact', contactRoutes);
 
 // Error handling middleware
 app.use((err: Error, _req: Request, res: Response, _next: any) => {

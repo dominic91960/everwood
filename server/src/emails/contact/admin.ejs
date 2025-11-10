@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Everwood Collection - Contact Form Submission</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #475158;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .info-row {
+            display: flex;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .info-label {
+            font-weight: bold;
+            min-width: 120px;
+            color: #475158;
+        }
+        .message-section {
+            background-color: #f9f9f9;
+            border-left: 4px solid #475158;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Everwood Collection - Contact Form Submission</h1>
+        </div>
+        
+        <p><strong>You have received a new contact form submission from Everwood Collection.</strong></p>
+        
+        <div class="info-row">
+            <span class="info-label">Name:</span>
+            <span><%= firstName %> <%= lastName %></span>
+        </div>
+        
+        <div class="info-row">
+            <span class="info-label">Email:</span>
+            <span><a href="mailto:<%= email %>"><%= email %></a></span>
+        </div>
+        
+        <div class="info-row">
+            <span class="info-label">Phone:</span>
+            <span><a href="tel:<%= phone %>"><%= phone %></a></span>
+        </div>
+        
+        <div class="message-section">
+            <h3 style="margin-top: 0;">Message:</h3>
+            <p><%= message %></p>
+        </div>
+        
+
+        
+        <div class="footer">
+            <p>This is an automated notification from Everwood Collection Contact</p>
+            <p>Received on <%= new Date().toLocaleString() %></p>
+        </div>
+    </div>
+</body>
+</html>
+
+

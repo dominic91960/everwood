@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - Everwood Collection</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #475158;
+            margin-bottom: 10px;
+        }
+        h1 {
+            color: #475158;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .message-box {
+            background-color: #f9f9f9;
+            border-left: 4px solid #475158;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 12px;
+            color: #666;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #475158;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 25px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Everwood Collection</div>
+        </div>
+        
+        <h1>Thank You, <%= firstName %>!</h1>
+        
+        <p>We've received your message and appreciate you reaching out to us at Everwood Collection.</p>
+        
+        <div class="message-box">
+            <strong>Your Message:</strong><br>
+            <%= message %>
+        </div>
+        
+        <p>Our team will review your inquiry and get back to you within 24-48 hours.</p>
+        
+        <p>In the meantime, feel free to explore our furniture collection:</p>
+        
+        <center>
+            <a href="https://everwoodcollection.com" class="button">Visit Our Website</a>
+        </center>
+        
+        <div class="footer">
+            <p><strong>Everwood Collection</strong></p>
+            <p>Creating timeless furniture, crafted with care</p>
+            <p>
+                <a href="https://www.instagram.com/everwood.collection">Instagram</a> | 
+                <a href="https://www.facebook.com/everwoodcollection">Facebook</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+
+

@@ -1,7 +1,82 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Image from "next/image";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import axios from "axios";
+
+// Zod validation schema
+const contactSchema = z.object({
+  firstName: z
+    .string()
+    .min(2, "First name must be at least 2 characters")
+    .max(50, "First name must be less than 50 characters"),
+  lastName: z
+    .string()
+    .min(2, "Last name must be at least 2 characters")
+    .max(50, "Last name must be less than 50 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z
+    .string()
+    .min(10, "Phone number must be at least 10 digits")
+    .regex(/^[\d\s\-\+\(\)]+$/, "Please enter a valid phone number"),
+  message: z
+    .string()
+    .min(10, "Message must be at least 10 characters")
+    .max(1000, "Message must be less than 1000 characters"),
+});
+
+type ContactFormData = z.infer<typeof contactSchema>;
 
 function Form() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({ type: null, message: "" });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+  });
+
+  const onSubmit = async (data: ContactFormData) => {
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: "" });
+
+    try {
+      const response = await axios.post(
+        `${
+          process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
+        }/api/contact/submit`,
+        data
+      );
+
+      if (response.data.success) {
+        setSubmitStatus({
+          type: "success",
+          message:
+            "Thank you! Your message has been sent successfully. We'll get back to you soon!",
+        });
+        reset();
+      }
+    } catch (error: any) {
+      setSubmitStatus({
+        type: "error",
+        message:
+          error.response?.data?.message ||
+          "Failed to send message. Please try again later.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="margin-y">
       <div className="containerpaddin container mx-auto py-10 sm:py-0 ">
@@ -13,8 +88,24 @@ function Form() {
             data-aos-delay="100"
             className="flex flex-col pt-0 xl:pt-8 order-2 lg:order-1"
           >
+            {/* Success/Error Message */}
+            {submitStatus.type && (
+              <div
+                className={`mb-4 p-4 rounded-lg ${
+                  submitStatus.type === "success"
+                    ? "bg-green-100 text-green-800 border border-green-300"
+                    : "bg-red-100 text-red-800 border border-red-300"
+                }`}
+              >
+                {submitStatus.message}
+              </div>
+            )}
+
             {/* Form Fields */}
-            <form className="flex flex-col gap-4">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col gap-4"
+            >
               {/* First Row - First Name and Last Name */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* First Name */}
@@ -25,14 +116,24 @@ function Form() {
                       alt="Person"
                       width={18}
                       height={18}
-                      className="w-4 h-4 "
+                      className="w-4 h-4"
                     />
                   </div>
                   <input
                     type="text"
                     placeholder="First Name"
-                    className="w-full pl-10 pr-4 py-3 bg-[#F5F5F5] rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-[#475158]/20 font-poppins text-base"
+                    {...register("firstName")}
+                    className={`w-full pl-10 pr-4 py-3 bg-[#F5F5F5] rounded-lg border-none focus:outline-none focus:ring-2 ${
+                      errors.firstName
+                        ? "focus:ring-red-500 ring-2 ring-red-500"
+                        : "focus:ring-[#475158]/20"
+                    } font-poppins text-base`}
                   />
+                  {errors.firstName && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.firstName.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Last Name */}
@@ -43,18 +144,28 @@ function Form() {
                       alt="Person"
                       width={18}
                       height={18}
-                      className="w-4 h-4 "
+                      className="w-4 h-4"
                     />
                   </div>
                   <input
                     type="text"
                     placeholder="Last Name"
-                    className="w-full pl-10 pr-4 py-3 bg-[#F5F5F5] rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-[#475158]/20 font-poppins text-base"
+                    {...register("lastName")}
+                    className={`w-full pl-10 pr-4 py-3 bg-[#F5F5F5] rounded-lg border-none focus:outline-none focus:ring-2 ${
+                      errors.lastName
+                        ? "focus:ring-red-500 ring-2 ring-red-500"
+                        : "focus:ring-[#475158]/20"
+                    } font-poppins text-base`}
                   />
+                  {errors.lastName && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.lastName.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
-              {/* Second Row  */}
+              {/* Second Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Phone No */}
                 <div className="relative">
@@ -70,8 +181,18 @@ function Form() {
                   <input
                     type="tel"
                     placeholder="Phone No"
-                    className="w-full pl-10 pr-4 py-3 bg-[#F5F5F5] rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-[#475158]/20 font-poppins text-base"
+                    {...register("phone")}
+                    className={`w-full pl-10 pr-4 py-3 bg-[#F5F5F5] rounded-lg border-none focus:outline-none focus:ring-2 ${
+                      errors.phone
+                        ? "focus:ring-red-500 ring-2 ring-red-500"
+                        : "focus:ring-[#475158]/20"
+                    } font-poppins text-base`}
                   />
+                  {errors.phone && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.phone.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Email */}
@@ -82,14 +203,24 @@ function Form() {
                       alt="Email"
                       width={18}
                       height={18}
-                      className="w-5 h-5 "
+                      className="w-5 h-5"
                     />
                   </div>
                   <input
                     type="email"
                     placeholder="Email"
-                    className="w-full pl-10 pr-4 py-3 bg-[#F5F5F5] rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-[#475158]/20 font-poppins text-base"
+                    {...register("email")}
+                    className={`w-full pl-10 pr-4 py-3 bg-[#F5F5F5] rounded-lg border-none focus:outline-none focus:ring-2 ${
+                      errors.email
+                        ? "focus:ring-red-500 ring-2 ring-red-500"
+                        : "focus:ring-[#475158]/20"
+                    } font-poppins text-base`}
                   />
+                  {errors.email && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -98,8 +229,18 @@ function Form() {
                 <textarea
                   placeholder="Your Message"
                   rows={9}
-                  className="w-full px-4 py-3 bg-[#F5F5F5] rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-[#475158]/20 font-poppins text-sm resize-none"
+                  {...register("message")}
+                  className={`w-full px-4 py-3 bg-[#F5F5F5] rounded-lg border-none focus:outline-none focus:ring-2 ${
+                    errors.message
+                      ? "focus:ring-red-500 ring-2 ring-red-500"
+                      : "focus:ring-[#475158]/20"
+                  } font-poppins text-sm resize-none`}
                 />
+                {errors.message && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.message.message}
+                  </p>
+                )}
               </div>
 
               {/* Submit Button */}
@@ -107,11 +248,12 @@ function Form() {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="group bg-[#475158] text-white rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-opacity-90"
+                  disabled={isSubmitting}
+                  className="group bg-[#475158] text-white rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="flex flex-row items-center justify-center">
                     <div className="text-white description px-4 sm:px-3 md:px-5 lg:px-2 xl:px-3 2xl:px-4 font-poppins">
-                      Send Message
+                      {isSubmitting ? "Sending..." : "Send Message"}
                     </div>
                     <div className="text-white text-sm pr-1 py-1">
                       <img
@@ -129,7 +271,7 @@ function Form() {
                 <div className="flex flex-row gap-4">
                   <a
                     href="#"
-                    className="w-10 h-10 flex items-center justify-center hover:scale-105 "
+                    className="w-10 h-10 flex items-center justify-center hover:scale-105"
                   >
                     <Image
                       src="/image/contact/form/whatsapp.png"
@@ -143,7 +285,7 @@ function Form() {
                     href="https://www.instagram.com/everwood.collection"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 flex items-center justify-center hover:scale-105 "
+                    className="w-10 h-10 flex items-center justify-center hover:scale-105"
                   >
                     <Image
                       src="/image/contact/form/instagram.png"
@@ -157,7 +299,7 @@ function Form() {
                     href="https://www.facebook.com/everwoodcollection"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10  flex items-center justify-center hover:scale-105 "
+                    className="w-10 h-10 flex items-center justify-center hover:scale-105"
                   >
                     <Image
                       src="/image/contact/form/facebook.png"
@@ -200,7 +342,7 @@ function Form() {
                 alt="Contemporary Dining Area"
                 width={600}
                 height={400}
-                className="w-full  rounded-lg object-cover"
+                className="w-full rounded-lg object-cover"
               />
             </div>
           </div>
