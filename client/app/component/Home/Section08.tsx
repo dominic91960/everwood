@@ -20,8 +20,8 @@ const products = [
         price: '$326.00',
         category: 'Living',
         images: {
-            black: '/image/Home/Chair02.png',
-            gray: '/image/Home/Chair03.png',
+            black: '/image/category/ThirdCard/Chair01.png',
+            gray: '/image/category/ThirdCard/Chair02.png',
             
         }
     },
@@ -31,8 +31,8 @@ const products = [
         price: '$526.00',
         category: 'Bedroom',
         images: {
-            black: '/image/Home/Chair03.png',
-            gray: '/image/Home/Chair04.png',
+            black: '/image/category/FourthCard/Cupboard01.png',
+            gray: '/image/category/FourthCard/Cupboard02.png',
             
         }
     },
@@ -42,8 +42,8 @@ const products = [
         price: '$826.00',
         category: 'Wardrobes',
         images: {
-            black: '/image/Home/Chair04.png',
-            gray: '/image/Home/Chair05.png',
+            black: '/image/category/FifthCard/DrawersChest01.png',
+            gray: '/image/category/FifthCard/DrawersChest02.png',
             
         }
     },
@@ -53,8 +53,8 @@ const products = [
         price: '$156.00',
         category: 'Living',
         images: {
-            black: '/image/Home/Chair05.png',
-            gray: '/image/Home/Chair01.png',
+            black: '/image/category/SixthCard/SideBoard01.png',
+            gray: '/image/category/SixthCard/SideBoard02.png',
             
         }
     },
@@ -64,8 +64,30 @@ const products = [
         price: '$426.00',
         category: 'Bedroom',
         images: {
-            black: '/image/Home/Chair02.png',
-            gray: '/image/Home/Chair01.png',
+            black: '/image/category/SeventhCard/TV console 01.png',
+            gray: '/image/category/SeventhCard/TV console 02.png',
+            
+        }
+    },
+    { 
+        id: 7, 
+        name: 'Bedroom Cabinet', 
+        price: '$426.00',
+        category: 'Bedroom',
+        images: {
+            black: '/image/category/EighthCard/Chair03.png',
+            gray: '/image/category/EighthCard/Chair04.png',
+            
+        }
+    },
+    { 
+        id: 8, 
+        name: 'Bedroom Cabinet', 
+        price: '$426.00',
+        category: 'Bedroom',
+        images: {
+            black: '/image/category/NinethCard/Table01.png',
+            gray: '/image/category/NinethCard/Table02.png',
             
         }
     },
