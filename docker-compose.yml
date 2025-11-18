@@ -11,9 +11,13 @@ services:
       - PORT=5000
       - NODE_ENV=production
       - JWT_SECRET=${JWT_SECRET}
-      - ALLOWED_ORIGINS=http://${VPS_HOST}:3000
+      - ALLOWED_ORIGINS=http://${VPS_HOST}:3000 , https://everwoodcollection.com
       - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
       - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+      - BREVO_API_KEY=${BREVO_API_KEY}
+      - BREVO_SENDER_EMAIL=${BREVO_SENDER_EMAIL}
+      - BREVO_SENDER_NAME=${BREVO_SENDER_NAME}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
     restart: unless-stopped
     networks:
       - furniture-network

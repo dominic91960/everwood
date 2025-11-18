@@ -119,6 +119,12 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           NEXT_PUBLIC_SUPABASE_BUCKET=furniture
+          
+          # Brevo Email Configuration
+          BREVO_API_KEY=${{ secrets.BREVO_API_KEY }}
+          BREVO_SENDER_EMAIL=${{ secrets.BREVO_SENDER_EMAIL }}
+          BREVO_SENDER_NAME=${{ secrets.BREVO_SENDER_NAME }}
+          ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}
           EOF
           
           # Display .env (without sensitive values)
@@ -158,6 +164,9 @@ jobs:
             echo "📋 Environment variables (masked):"
             echo "  - DATABASE_URL: $(grep -q 'DATABASE_URL' .env && echo '✓ Set' || echo '✗ Not set')"
             echo "  - JWT_SECRET: $(grep -q 'JWT_SECRET' .env && echo '✓ Set' || echo '✗ Not set')"
+            echo "  - BREVO_API_KEY: $(grep -q 'BREVO_API_KEY' .env && echo '✓ Set' || echo '✗ Not set')"
+            echo "  - BREVO_SENDER_EMAIL: $(grep -q 'BREVO_SENDER_EMAIL' .env && echo '✓ Set' || echo '✗ Not set')"
+            echo "  - ADMIN_EMAIL: $(grep -q 'ADMIN_EMAIL' .env && echo '✓ Set' || echo '✗ Not set')"
             echo "  - DOCKER_USERNAME: $(grep 'DOCKER_USERNAME' .env | cut -d'=' -f2)"
             
             echo "📋 Verifying docker-compose.yml..."
@@ -188,7 +197,7 @@ jobs:
             docker compose ps
             
             echo "🔍 Checking API container environment..."
-            docker exec furniture-api-container printenv | grep -E "DATABASE_URL|JWT_SECRET|NODE_ENV|ALLOWED_ORIGINS" | sed 's/DATABASE_URL=.*/DATABASE_URL=***MASKED***/' | sed 's/JWT_SECRET=.*/JWT_SECRET=***MASKED***/' || echo "Could not check environment"
+            docker exec furniture-api-container printenv | grep -E "DATABASE_URL|JWT_SECRET|NODE_ENV|ALLOWED_ORIGINS|BREVO_API_KEY|BREVO_SENDER_EMAIL|ADMIN_EMAIL" | sed 's/DATABASE_URL=.*/DATABASE_URL=***MASKED***/' | sed 's/JWT_SECRET=.*/JWT_SECRET=***MASKED***/' | sed 's/BREVO_API_KEY=.*/BREVO_API_KEY=***MASKED***/' || echo "Could not check environment"
             
             echo "🧹 Cleaning up old images..."
             # Remove dangling images (untagged)
