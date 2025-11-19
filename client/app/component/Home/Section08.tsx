@@ -9,8 +9,8 @@ const products = [
         price: '$126.00',
         category: 'Living',
         images: {
-            black: '/image/category/SecondCaard/Rectangle1.png',
-            gray: '/image/category/SecondCaard/Rectangle2.png',
+            black: '/image/category/SecondCaard/Rectangle 01.png',
+            gray: '/image/category/SecondCaard/Rectangle 02.png',
            
         }
     },
@@ -20,8 +20,8 @@ const products = [
         price: '$326.00',
         category: 'Living',
         images: {
-            black: '/image/category/ThirdCard/Chair01.png',
-            gray: '/image/category/ThirdCard/Chair02.png',
+            black: '/image/category/ThirdCard/Chair 01.png',
+            gray: '/image/category/ThirdCard/Chair 02.png',
             
         }
     },
@@ -31,8 +31,8 @@ const products = [
         price: '$526.00',
         category: 'Bedroom',
         images: {
-            black: '/image/category/FourthCard/Cupboard01.png',
-            gray: '/image/category/FourthCard/Cupboard02.png',
+            black: '/image/category/FourthCard/Cupboard 01.png',
+            gray: '/image/category/FourthCard/Cupboard 02.png',
             
         }
     },
@@ -42,8 +42,8 @@ const products = [
         price: '$826.00',
         category: 'Wardrobes',
         images: {
-            black: '/image/category/FifthCard/DrawersChest01.png',
-            gray: '/image/category/FifthCard/DrawersChest02.png',
+            black: '/image/category/FifthCard/DrawersChest 01.png',
+            gray: '/image/category/FifthCard/DrawersChest 02.png',
             
         }
     },
@@ -53,8 +53,8 @@ const products = [
         price: '$156.00',
         category: 'Living',
         images: {
-            black: '/image/category/SixthCard/SideBoard01.png',
-            gray: '/image/category/SixthCard/SideBoard02.png',
+            black: '/image/category/SixthCard/SideBoard 01.png',
+            gray: '/image/category/SixthCard/SideBoard 02.png',
             
         }
     },
@@ -64,19 +64,19 @@ const products = [
         price: '$426.00',
         category: 'Bedroom',
         images: {
-            black: '/image/category/SeventhCard/TV console 01.png',
-            gray: '/image/category/SeventhCard/TV console 02.png',
+            black: '/image/category/SeventhCard/TV_console 01.png',
+            gray: '/image/category/SeventhCard/TV_console 02.png',
             
         }
     },
     { 
         id: 7, 
-        name: 'Bedroom Cabinet', 
+        name: 'Dining Chair', 
         price: '$426.00',
         category: 'Bedroom',
         images: {
-            black: '/image/category/EighthCard/Chair03.png',
-            gray: '/image/category/EighthCard/Chair04.png',
+            black: '/image/category/EighthCard/Chair 03.png',
+            gray: '/image/category/EighthCard/Chair 04.png',
             
         }
     },
@@ -86,8 +86,8 @@ const products = [
         price: '$426.00',
         category: 'Bedroom',
         images: {
-            black: '/image/category/NinethCard/Table01.png',
-            gray: '/image/category/NinethCard/Table02.png',
+            black: '/image/category/NinethCard/Table 01.png',
+            gray: '/image/category/NinethCard/Table 02.png',
             
         }
     },
