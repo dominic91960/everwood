@@ -1,5 +1,6 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import Footer2 from '../component/Footer/Footer2'
 import Image from 'next/image'
@@ -7,7 +8,51 @@ import Section08 from '../component/Home/Section08'
 import { Navbar2 } from '../component/Navbar/Navbar2'
 
 function page() {
+    const router = useRouter()
+    const searchParams = useSearchParams()
+    const categoryMap = useMemo(
+        () =>
+            new Map(
+                ['All', 'Living', 'Bedroom', 'Wardrobes', 'Kitchen'].map((label) => [
+                    label.toLowerCase(),
+                    label,
+                ])
+            ),
+        []
+    )
     const [activeCategory, setActiveCategory] = useState('All')
+
+    useEffect(() => {
+        const param = searchParams.get('category')
+        if (!param) {
+            setActiveCategory('All')
+            return
+        }
+
+        const matchedCategory = categoryMap.get(param.toLowerCase())
+        if (matchedCategory) {
+            setActiveCategory(matchedCategory)
+        } else {
+            setActiveCategory('All')
+        }
+    }, [categoryMap, searchParams])
+
+    const handleCategorySelect = useCallback(
+        (category: string) => {
+            setActiveCategory(category)
+
+            const params = new URLSearchParams(searchParams.toString())
+            if (category === 'All') {
+                params.delete('category')
+            } else {
+                params.set('category', category.toLowerCase())
+            }
+
+            const query = params.toString()
+            router.replace(`/Catalog${query ? `?${query}` : ''}`, { scroll: false })
+        },
+        [router, searchParams]
+    )
     return (
         <div className="font-poppins">
             <Navbar2 />
@@ -55,7 +100,7 @@ function page() {
                             </div>*/}
                             <div className='flex flex-row justify-center gap-2 md:gap-4 w-full mt-4 lg:mt-0'>
                                 <button 
-                                    onClick={() => setActiveCategory('All')}
+                                    onClick={() => handleCategorySelect('All')}
                                     className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                                         activeCategory === 'All' 
                                             ? 'bg-button text-white' 
@@ -65,7 +110,7 @@ function page() {
                                     All
                                 </button>
                                 <button 
-                                    onClick={() => setActiveCategory('Living')}
+                                    onClick={() => handleCategorySelect('Living')}
                                     className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                                         activeCategory === 'Living' 
                                             ? 'bg-button text-white' 
@@ -75,7 +120,7 @@ function page() {
                                     Living
                                 </button>
                                 <button 
-                                    onClick={() => setActiveCategory('Bedroom')}
+                                    onClick={() => handleCategorySelect('Bedroom')}
                                     className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                                         activeCategory === 'Bedroom' 
                                             ? 'bg-button text-white' 
@@ -85,7 +130,7 @@ function page() {
                                     Bedroom
                                 </button>
                                 <button 
-                                    onClick={() => setActiveCategory('Wardrobes')}
+                                    onClick={() => handleCategorySelect('Wardrobes')}
                                     className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                                         activeCategory === 'Wardrobes' 
                                             ? 'bg-button text-white' 
@@ -95,7 +140,7 @@ function page() {
                                     Wardrobes
                                 </button>
                                 <button 
-                                    onClick={() => setActiveCategory('Kitchen')}
+                                    onClick={() => handleCategorySelect('Kitchen')}
                                     className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                                         activeCategory === 'Kitchen' 
                                             ? 'bg-button text-white' 

@@ -63,13 +63,10 @@ function Navbar({ className }: { className?: string }) {
             </Link>
             <MenuItem setActive={setActive} active={active} item="Catalog" isActive={pathname?.startsWith('/Catalog')} href="/Catalog">
               <div className="flex flex-col space-y-4 text-sm">
-                <HoveredLink href="/Catalog">Living</HoveredLink>
-                <HoveredLink href="/Catalog">Dining</HoveredLink>
-                <HoveredLink href="/Catalog">Bedroom</HoveredLink>
-                <HoveredLink href="/Catalog">Wardrobe</HoveredLink>
-                <HoveredLink href="/Catalog">Kitchen</HoveredLink>
-                <HoveredLink href="/Catalog">Doors & Flooring</HoveredLink>
-                <HoveredLink href="/Catalog">Projects</HoveredLink>
+                <HoveredLink href="/Catalog?category=Living">Living</HoveredLink>
+                <HoveredLink href="/Catalog?category=Bedroom">Bedroom</HoveredLink>
+                <HoveredLink href="/Catalog?category=Wardrobes">Wardrobes</HoveredLink>
+                <HoveredLink href="/Catalog?category=Kitchen">Kitchen</HoveredLink>
               </div>
             </MenuItem>
             <Link href="/designyourown" className={`cursor-pointer hover:text-black transition-colors ${pathname === '/designyourown' ? 'text-black font-bold' : 'text-gray-600'}`}>
@@ -137,26 +134,17 @@ function Navbar({ className }: { className?: string }) {
               </div>
               {catalogOpen && (
                 <div className="flex flex-col gap-3 pl-4 mt-2">
-                  <Link href="/Catalog" onClick={() => { setMobileMenuOpen(false); setCatalogOpen(false); }} className="text-gray-600 hover:text-black text-sm py-1 transition-colors">
+                  <Link href="/Catalog?category=Living" onClick={() => { setMobileMenuOpen(false); setCatalogOpen(false); }} className="text-gray-600 hover:text-black text-sm py-1 transition-colors">
                     Living
                   </Link>
-                  <Link href="/Catalog" onClick={() => { setMobileMenuOpen(false); setCatalogOpen(false); }} className="text-gray-600 hover:text-black text-sm py-1 transition-colors">
-                    Dining
-                  </Link>
-                  <Link href="/Catalog" onClick={() => { setMobileMenuOpen(false); setCatalogOpen(false); }} className="text-gray-600 hover:text-black text-sm py-1 transition-colors">
+                  <Link href="/Catalog?category=Bedroom" onClick={() => { setMobileMenuOpen(false); setCatalogOpen(false); }} className="text-gray-600 hover:text-black text-sm py-1 transition-colors">
                     Bedroom
                   </Link>
-                  <Link href="/Catalog" onClick={() => { setMobileMenuOpen(false); setCatalogOpen(false); }} className="text-gray-600 hover:text-black text-sm py-1 transition-colors">
-                    Wardrobe
+                  <Link href="/Catalog?category=Wardrobes" onClick={() => { setMobileMenuOpen(false); setCatalogOpen(false); }} className="text-gray-600 hover:text-black text-sm py-1 transition-colors">
+                    Wardrobes
                   </Link>
-                  <Link href="/Catalog" onClick={() => { setMobileMenuOpen(false); setCatalogOpen(false); }} className="text-gray-600 hover:text-black text-sm py-1 transition-colors">
+                  <Link href="/Catalog?category=Kitchen" onClick={() => { setMobileMenuOpen(false); setCatalogOpen(false); }} className="text-gray-600 hover:text-black text-sm py-1 transition-colors">
                     Kitchen
-                  </Link>
-                  <Link href="/Catalog" onClick={() => { setMobileMenuOpen(false); setCatalogOpen(false); }} className="text-gray-600 hover:text-black text-sm py-1 transition-colors">
-                    Doors & Flooring
-                  </Link>
-                  <Link href="/Catalog" onClick={() => { setMobileMenuOpen(false); setCatalogOpen(false); }} className="text-gray-600 hover:text-black text-sm py-1 transition-colors">
-                    Projects
                   </Link>
                 </div>
               )}
