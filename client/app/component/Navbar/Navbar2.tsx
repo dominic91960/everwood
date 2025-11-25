@@ -14,7 +14,7 @@ export function Navbar2() {
     </>
   );
 }
-
+// k
 function Navbar({ className }: { className?: string }) {
   const [active, setActive] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
