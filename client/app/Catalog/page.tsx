@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import Footer2 from '../component/Footer/Footer2'
@@ -7,7 +7,7 @@ import Image from 'next/image'
 import Section08 from '../component/Home/Section08'
 import { Navbar2 } from '../component/Navbar/Navbar2'
 
-function page() {
+function CatalogPageContent() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const categoryMap = useMemo(
@@ -60,6 +60,7 @@ function page() {
             <div className='containerpaddin container mx-auto'>
                 <div className='margin-y'>
                     <div data-aos="fade-up"
+                        suppressHydrationWarning
                         data-aos-delay="100"
                         data-aos-duration="2000">
                         <div className="lg:flex flex-row items-center justify-between gap-4">
@@ -75,6 +76,7 @@ function page() {
 
                     <div className='margin-y'>
                         <div 
+                            suppressHydrationWarning
                             data-aos="fade-up"
                             data-aos-delay="500"
                             data-aos-duration="2000"
@@ -91,6 +93,7 @@ function page() {
                         </div>
                     </div>
                     <div data-aos="fade-up"
+                    suppressHydrationWarning
                     data-aos-delay="100"
                     data-aos-duration="2000">
                     <div className='margin-y'>
@@ -98,10 +101,10 @@ function page() {
                             {/*<div className="subtitle text-left">
                                 Curated Collections
                             </div>*/}
-                            <div className='flex flex-row justify-center gap-2 md:gap-4 w-full mt-4 lg:mt-0'>
+                            <div className='flex flex-row flex-wrap justify-center gap-2 md:gap-4 w-full mt-4 lg:mt-0'>
                                 <button 
                                     onClick={() => handleCategorySelect('All')}
-                                    className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                                    className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap ${
                                         activeCategory === 'All' 
                                             ? 'bg-button text-white' 
                                             : 'text-button hover:bg-button hover:text-white'
@@ -111,7 +114,7 @@ function page() {
                                 </button>
                                 <button 
                                     onClick={() => handleCategorySelect('Living')}
-                                    className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                                    className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap ${
                                         activeCategory === 'Living' 
                                             ? 'bg-button text-white' 
                                             : 'text-button hover:bg-button hover:text-white'
@@ -121,7 +124,7 @@ function page() {
                                 </button>
                                 <button 
                                     onClick={() => handleCategorySelect('Bedroom')}
-                                    className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                                    className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap ${
                                         activeCategory === 'Bedroom' 
                                             ? 'bg-button text-white' 
                                             : 'text-button hover:bg-button hover:text-white'
@@ -131,7 +134,7 @@ function page() {
                                 </button>
                                 <button 
                                     onClick={() => handleCategorySelect('Wardrobes')}
-                                    className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                                    className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap ${
                                         activeCategory === 'Wardrobes' 
                                             ? 'bg-button text-white' 
                                             : 'text-button hover:bg-button hover:text-white'
@@ -141,7 +144,7 @@ function page() {
                                 </button>
                                 <button 
                                     onClick={() => handleCategorySelect('Kitchen')}
-                                    className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                                    className={`py-2 px-4 md:px-8 rounded-full transition-colors cursor-pointer whitespace-nowrap ${
                                         activeCategory === 'Kitchen' 
                                             ? 'bg-button text-white' 
                                             : 'text-button hover:bg-button hover:text-white'
@@ -161,4 +164,10 @@ function page() {
     )
 }
 
-export default page
+export default function Page() {
+    return (
+        <Suspense fallback={<div className="min-h-[200px]" />}>
+            <CatalogPageContent />
+        </Suspense>
+    )
+}
