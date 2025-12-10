@@ -20,46 +20,46 @@ function Footer2() {
             </div>
             <div className="hidden md:block w-[1px] bg-white opacity-40 self-stretch"></div>
             <div className="flex flex-col justify-center w-full md:w-auto md:mt-10">
-              <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 lg:gap-8">
+              <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 md:gap-2.5 lg:gap-4 xl:gap-6 px-2">
                 <Link
                   href="/"
-                  className="text-white hover:text-gray-400 transition-colors font-medium text-sm md:text-base"
+                  className="text-white hover:text-gray-400 transition-colors font-medium text-[10px] sm:text-xs md:text-sm lg:text-base whitespace-nowrap"
                 >
                   Home
                 </Link>
                 <Link
                   href="/about"
-                  className="text-white hover:text-gray-400 transition-colors font-medium text-sm md:text-base"
+                  className="text-white hover:text-gray-400 transition-colors font-medium text-[10px] sm:text-xs md:text-sm lg:text-base whitespace-nowrap"
                 >
                   About
                 </Link>
                 <Link
                   href="/Catalog"
-                  className="text-white hover:text-gray-400 transition-colors font-medium text-sm md:text-base"
+                  className="text-white hover:text-gray-400 transition-colors font-medium text-[10px] sm:text-xs md:text-sm lg:text-base whitespace-nowrap"
                 >
                   Catalog
                 </Link>
                 <Link
                   href="/designyourown"
-                  className="text-white hover:text-gray-400 transition-colors font-medium text-sm md:text-base"
+                  className="text-white hover:text-gray-400 transition-colors font-medium text-[10px] sm:text-xs md:text-sm lg:text-base whitespace-nowrap"
                 >
                   Design Your Own
                 </Link>
                 <Link
                   href="/contact"
-                  className="text-white hover:text-gray-400 transition-colors font-medium text-sm md:text-base"
+                  className="text-white hover:text-gray-400 transition-colors font-medium text-[10px] sm:text-xs md:text-sm lg:text-base whitespace-nowrap"
                 >
                   Contact
                 </Link>
                 <Link
                   href="/Blog"
-                  className="text-white hover:text-gray-400 transition-colors font-medium text-sm md:text-base"
+                  className="text-white hover:text-gray-400 transition-colors font-medium text-[10px] sm:text-xs md:text-sm lg:text-base whitespace-nowrap"
                 >
                   Blog
                 </Link>
               </div>
-              <div>
-                <div className="text-white text-[60px] sm:text-[90px] md:text-[100px] lg:text-[150px] xl:text-[150px] items-center justify-center flex font-bold overflow-hidden opacity-15">
+              <div className="w-full overflow-hidden">
+                <div className="text-white text-[30px] sm:text-[40px] md:text-[50px] lg:text-[80px] xl:text-[120px] 2xl:text-[150px] items-center justify-center flex font-bold opacity-15 whitespace-nowrap">
                   EVERWOOD
                 </div>
               </div>
