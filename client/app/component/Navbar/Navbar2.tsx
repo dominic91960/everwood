@@ -43,7 +43,7 @@ function Navbar({ className }: { className?: string }) {
         className={cn("fixed top-2 lg:top-4 inset-x-0 max-w-5xl mx-auto z-50 px-4", className)}
       >
         {/* Desktop Navbar */}
-        <div className="bg-white rounded-full hidden lg:flex items-center justify-center px-8 shadow-lg">
+        <div className="bg-white rounded-full hidden xl:flex items-center justify-center px-3 2xl:px-8 shadow-lg overflow-hidden max-w-full">
           {/* <Link href="/" className="shrink-0">
             <Image
               src="/image/Logo/Logo.png"
@@ -53,11 +53,11 @@ function Navbar({ className }: { className?: string }) {
               className="w-10 h-10 sm:w-12 sm:h-12"
             />
           </Link> */}
-          <Menu setActive={setActive} className="gap-x-4">
-            <Link href="/" className={`cursor-pointer hover:text-black transition-colors ${pathname === '/' ? 'text-black font-bold' : 'text-gray-600'}`}>
+          <Menu setActive={setActive} className="">
+            <Link href="/" className={`cursor-pointer hover:text-black transition-colors whitespace-nowrap text-xs 2xl:text-base shrink-0 ${pathname === '/' ? 'text-black font-bold' : 'text-gray-600'}`}>
               Home
             </Link>
-            <Link href="/about" className={`cursor-pointer hover:text-black transition-colors ${pathname === '/about' ? 'text-black font-bold' : 'text-gray-600'}`}>
+            <Link href="/about" className={`cursor-pointer hover:text-black transition-colors whitespace-nowrap text-xs 2xl:text-base shrink-0 ${pathname === '/about' ? 'text-black font-bold' : 'text-gray-600'}`}>
               About
             </Link>
             <MenuItem setActive={setActive} active={active} item="Catalog" isActive={pathname?.startsWith('/Catalog')} href="/Catalog">
@@ -68,20 +68,20 @@ function Navbar({ className }: { className?: string }) {
                 <HoveredLink href="/Catalog?category=Kitchen">Kitchen</HoveredLink>
               </div>
             </MenuItem>
-            <Link href="/designyourown" className={`cursor-pointer hover:text-black transition-colors ${pathname === '/designyourown' ? 'text-black font-bold' : 'text-gray-600'}`}>
+            <Link href="/designyourown" className={`cursor-pointer hover:text-black transition-colors whitespace-nowrap text-xs 2xl:text-base shrink-0 ${pathname === '/designyourown' ? 'text-black font-bold' : 'text-gray-600'}`}>
               Design Your Own
             </Link>
-            <Link href="/contact" className={`cursor-pointer hover:text-black transition-colors ${pathname === '/contact' ? 'text-black font-bold' : 'text-gray-600'}`}>
+            <Link href="/contact" className={`cursor-pointer hover:text-black transition-colors whitespace-nowrap text-xs 2xl:text-base shrink-0 ${pathname === '/contact' ? 'text-black font-bold' : 'text-gray-600'}`}>
               Contact
             </Link>
-            <Link href="/Blog" className={`cursor-pointer hover:text-black transition-colors ${pathname === '/Blog' ? 'text-black font-bold' : 'text-gray-600'}`}>
+            <Link href="/Blog" className={`cursor-pointer hover:text-black transition-colors whitespace-nowrap text-xs 2xl:text-base shrink-0 ${pathname === '/Blog' ? 'text-black font-bold' : 'text-gray-600'}`}>
               Blog
             </Link>
           </Menu>
         </div>
 
-        {/* Mobile Navbar */}
-        <div className="bg-white rounded-full lg:hidden flex items-center justify-between px-6 py-4 shadow-lg">
+        {/* Mobile/Tablet Navbar */}
+        <div className="bg-white rounded-full xl:hidden flex items-center justify-between px-6 py-4 shadow-lg">
           <Link href="/" className="shrink-0">
             <Image
               src="/image/Logo/Logo.png"
@@ -107,9 +107,9 @@ function Navbar({ className }: { className?: string }) {
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
+      {/* Mobile/Tablet Menu Dropdown */}
       {mounted && mobileMenuOpen && (
-        <div className="fixed top-20 left-4 right-4 bottom-4 bg-white rounded-2xl shadow-xl z-40 lg:hidden overflow-hidden">
+        <div className="fixed top-20 left-4 right-4 bottom-4 bg-white rounded-2xl shadow-xl z-40 xl:hidden overflow-hidden">
           <div className="flex flex-col p-6 gap-4 overflow-y-auto h-full">
             <Link href="/" onClick={() => setMobileMenuOpen(false)} className={`hover:text-black font-medium py-2 transition-colors ${pathname === '/' ? 'text-black font-bold' : 'text-gray-600'}`}>
               Home
