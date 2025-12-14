@@ -3,9 +3,9 @@ import Header from "../component/contact/header";
 import { Navbar2 } from "../component/Navbar/Navbar2";
 import CtLogo from "../component/contact/ctlogo";
 import Seamless from "../component/contact/seamless";
-import Form from "../component/contact/form";
 import Create from "../component/contact/create";
 import Footer2 from "../component/Footer/Footer2";
+import FormWrapper from "../component/contact/formwrapper";
 
 export const metadata: Metadata = {
   title: "Contact Everwood Collection | Custom Furniture Sri Lanka",
@@ -31,7 +31,7 @@ function page() {
       <Header />
       <CtLogo />
       <Seamless />
-      <Form />
+      <FormWrapper />
       <Create />
       <Footer2 />
     </div>

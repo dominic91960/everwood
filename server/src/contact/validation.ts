@@ -1,41 +1,48 @@
-import { body } from 'express-validator';
+import { body } from "express-validator";
 
 export const contactValidation = [
-  body('firstName')
+  body("firstName")
     .trim()
     .notEmpty()
-    .withMessage('First name is required')
+    .withMessage("First name is required")
     .isLength({ min: 2, max: 50 })
-    .withMessage('First name must be between 2 and 50 characters'),
-  
-  body('lastName')
+    .withMessage("First name must be between 2 and 50 characters"),
+
+  body("lastName")
     .trim()
     .notEmpty()
-    .withMessage('Last name is required')
+    .withMessage("Last name is required")
     .isLength({ min: 2, max: 50 })
-    .withMessage('Last name must be between 2 and 50 characters'),
-  
-  body('email')
+    .withMessage("Last name must be between 2 and 50 characters"),
+
+  body("email")
     .trim()
     .notEmpty()
-    .withMessage('Email is required')
+    .withMessage("Email is required")
     .isEmail()
-    .withMessage('Please provide a valid email address')
+    .withMessage("Please provide a valid email address")
     .normalizeEmail(),
-  
-  body('phone')
+
+  body("phone")
     .trim()
     .notEmpty()
-    .withMessage('Phone number is required')
+    .withMessage("Phone number is required")
     .matches(/^[\d\s\-\+\(\)]+$/)
-    .withMessage('Please provide a valid phone number'),
-  
-  body('message')
+    .withMessage("Please provide a valid phone number"),
+
+  body("message")
     .trim()
     .notEmpty()
-    .withMessage('Message is required')
+    .withMessage("Message is required")
     .isLength({ min: 10, max: 1000 })
-    .withMessage('Message must be between 10 and 1000 characters'),
+    .withMessage("Message must be between 10 and 1000 characters"),
+
+  body("recaptchaToken")
+    .notEmpty()
+    .withMessage("reCAPTCHA token is required")
+    .isString()
+    .withMessage("reCAPTCHA token must be a string")
+    .trim()
+    .isLength({ min: 20 })
+    .withMessage("Invalid reCAPTCHA token format"),
 ];
-
-

@@ -1,4 +1,6 @@
 "use client";
+
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import React, { useState } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
@@ -33,6 +35,7 @@ const contactSchema = z.object({
 type ContactFormData = z.infer<typeof contactSchema>;
 
 function Form() {
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
     type: "success" | "error" | null;
@@ -49,15 +52,24 @@ function Form() {
   });
 
   const onSubmit = async (data: ContactFormData) => {
+    if (!executeRecaptcha) {
+      setSubmitStatus({
+        type: "error",
+        message: "reCAPTCHA not ready. Please try again.",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitStatus({ type: null, message: "" });
 
     try {
+      const recaptchaToken = await executeRecaptcha("contact_form");
       const response = await axios.post(
         `${
           process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
         }/api/contact/submit`,
-        data
+        { ...data, recaptchaToken }
       );
 
       if (response.data.success) {
