@@ -110,6 +110,19 @@ function Footer2() {
             </div>
           </div>
           <div className="bg-white h-[1px] w-full opacity-40"></div>
+          <div className="flex items-center justify-center mt-6 md:mt-8">
+            <p className="text-white text-xs sm:text-sm opacity-60 text-center">
+              Design by{" "}
+              <a
+                href="https://sphiriadigital.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-gray-300 transition-colors underline"
+              >
+                Sphiria Digital Studios
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
