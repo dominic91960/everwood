@@ -52,7 +52,7 @@ function Navbar({ className }: { className?: string }) {
               height={50}
               className="w-10 h-10 sm:w-12 sm:h-12"
             />
-          </Link> djdj*/}
+          </Link> */}
           <Menu setActive={setActive} className="">
             <Link href="/" className={`cursor-pointer hover:text-black transition-colors whitespace-nowrap text-xs lg:text-sm xl:text-base shrink-0 ${pathname === '/' ? 'text-black font-bold' : 'text-gray-600'}`}>
               Home
