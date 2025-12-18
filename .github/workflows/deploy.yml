@@ -125,6 +125,10 @@ jobs:
           BREVO_SENDER_EMAIL=${{ secrets.BREVO_SENDER_EMAIL }}
           BREVO_SENDER_NAME=${{ secrets.BREVO_SENDER_NAME }}
           ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}
+          
+          # reCAPTCHA Configuration
+          NEXT_PUBLIC_RECAPTCHA_SITE_KEY=${{ secrets.NEXT_PUBLIC_RECAPTCHA_SITE_KEY }}
+          RECAPTCHA_SECRET_KEY=${{ secrets.RECAPTCHA_SECRET_KEY }}
           EOF
           
           # Display .env (without sensitive values)
@@ -167,6 +171,8 @@ jobs:
             echo "  - BREVO_API_KEY: $(grep -q 'BREVO_API_KEY' .env && echo '✓ Set' || echo '✗ Not set')"
             echo "  - BREVO_SENDER_EMAIL: $(grep -q 'BREVO_SENDER_EMAIL' .env && echo '✓ Set' || echo '✗ Not set')"
             echo "  - ADMIN_EMAIL: $(grep -q 'ADMIN_EMAIL' .env && echo '✓ Set' || echo '✗ Not set')"
+            echo "  - NEXT_PUBLIC_RECAPTCHA_SITE_KEY: $(grep -q 'NEXT_PUBLIC_RECAPTCHA_SITE_KEY' .env && echo '✓ Set' || echo '✗ Not set')"
+            echo "  - RECAPTCHA_SECRET_KEY: $(grep -q 'RECAPTCHA_SECRET_KEY' .env && echo '✓ Set' || echo '✗ Not set')"
             echo "  - DOCKER_USERNAME: $(grep 'DOCKER_USERNAME' .env | cut -d'=' -f2)"
             
             echo "📋 Verifying docker-compose.yml..."
@@ -184,7 +190,7 @@ jobs:
             docker pull ${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME_CLIENT }}:latest
             docker pull ${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME_SERVER }}:latest
             
-            echo "🛑 Stopping old containers..."
+            echo "🛑 Stopping old containers..." 
             docker compose down
             
             echo "🚀 Starting new containers..."
@@ -197,7 +203,7 @@ jobs:
             docker compose ps
             
             echo "🔍 Checking API container environment..."
-            docker exec furniture-api-container printenv | grep -E "DATABASE_URL|JWT_SECRET|NODE_ENV|ALLOWED_ORIGINS|BREVO_API_KEY|BREVO_SENDER_EMAIL|ADMIN_EMAIL" | sed 's/DATABASE_URL=.*/DATABASE_URL=***MASKED***/' | sed 's/JWT_SECRET=.*/JWT_SECRET=***MASKED***/' | sed 's/BREVO_API_KEY=.*/BREVO_API_KEY=***MASKED***/' || echo "Could not check environment"
+            docker exec furniture-api-container printenv | grep -E "DATABASE_URL|JWT_SECRET|NODE_ENV|ALLOWED_ORIGINS|BREVO_API_KEY|BREVO_SENDER_EMAIL|ADMIN_EMAIL|RECAPTCHA_SECRET_KEY" | sed 's/DATABASE_URL=.*/DATABASE_URL=***MASKED***/' | sed 's/JWT_SECRET=.*/JWT_SECRET=***MASKED***/' | sed 's/BREVO_API_KEY=.*/BREVO_API_KEY=***MASKED***/' | sed 's/RECAPTCHA_SECRET_KEY=.*/RECAPTCHA_SECRET_KEY=***MASKED***/' || echo "Could not check environment"
             
             echo "🧹 Cleaning up old images..."
             # Remove dangling images (untagged)
