@@ -12,7 +12,7 @@ const generalLimiter = rateLimit({
 
 const contactLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
-  max: 2,
+  max: 4,
   message: {
     message: "Too many contact form submissions. Please try again in an hour",
   },
