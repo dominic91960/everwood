@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>TecHCD: New Contact Form Submission</title>
+    <title>TecHCD: Reset Your Password</title>
   </head>
   <body
     style="
@@ -18,9 +18,7 @@
     <table style="margin-top: 1em; width: 100%">
       <tr style="vertical-align: bottom">
         <td>
-          <h1 style="margin: 0; font-weight: 600">
-            New Contact Form Submission
-          </h1>
+          <h1 style="margin: 0; font-weight: 600">Reset Your Password</h1>
         </td>
         <td>
           <div style="margin-left: auto; width: 64px; height: 64px">
@@ -37,22 +35,12 @@
     </table>
     <hr style="border: none; border-top: 1px solid rgba(0, 0, 0, 0.1)" />
 
-    <p>
-      You have received a new message. Given below are your submission details:
-    </p>
+    <p>Hi <%= firstName %>,</p>
+    <p>We received a request to reset the password for your TecHCD account.</p>
+    <p>Click the link below to create a new password:</p>
 
-    <div style="background-color: rgba(0, 132, 240, 0.051); padding: 1em">
-      <p style="margin: 0"><strong>Name:</strong> <%= name %></p>
-      <p><strong>Email:</strong> <%= email %></p>
-      <p style="margin: 0">
-        <strong>Message:</strong><br />
-        <%= message %>
-      </p>
-    </div>
-
-    <p>Click the link below to reply directly to this message:</p>
     <a
-      href="mailto:<%= email %>"
+      href="<%= resetLink %>"
       style="
         display: block;
         width: fit-content;
@@ -67,10 +55,37 @@
         font-size: 1.1em;
       "
     >
-      Reply To <%= name %>
+      Reset Your Password
     </a>
 
-    <p>This message was sent from the TecHCD website contact form.</p>
+    <p>
+      If the above link doesn't work, copy and paste the following in your
+      browser
+    </p>
+
+    <div style="background-color: rgba(0, 132, 240, 0.051); padding: 1em">
+      <a
+        href="<%= resetLink %>"
+        style="
+          display: block;
+          color: #0084f0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        "
+      >
+        <%= resetLink %>
+      </a>
+    </div>
+
+    <p>
+      This password reset link will expire in 1 hour for your security.If you
+      didn't request this, you can safely ignore this email.
+    </p>
+
+    <p>
+      Best regards, <br />
+      The TecHCD Team.
+    </p>
 
     <hr style="border: none; border-top: 1px solid rgba(0, 0, 0, 0.1)" />
     <p style="opacity: 0.4; font-size: 0.8em">© 2025 TecHCD</p>
