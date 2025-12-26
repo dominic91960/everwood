@@ -160,3 +160,36 @@ export type StatisticsData = {
   topProducts: { product: Product; purchasedTimes: number }[];
   monthlyEarnings: { date: string; earnings: number }[];
 };
+
+export type BlogPostPayload = {
+  title: string;
+  description: string;
+  thumbnail: File;
+  content: string;
+  category: string;
+  tags: string;
+  isFeatured: boolean;
+  status: "draft" | "published";
+};
+
+export type BlogPost = {
+  _id: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  content: string;
+  category: {
+    _id: string;
+    name: string;
+    description: string;
+  };
+  tags: {
+    _id: string;
+    name: string;
+    description: string;
+  }[];
+  isFeatured: boolean;
+  status: "draft" | "published";
+  createdAt: string;
+  updatedAt: string;
+};

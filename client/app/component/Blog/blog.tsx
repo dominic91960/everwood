@@ -2,27 +2,19 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import api from "@/lib/api/blog-api";
 
-interface Blog {
-  id: string;
-  title: string;
-  content: string;
-  thumbnail: string;
-  time: string | null;
-  tags: string[];
-  mode: string;
-}
+import api from "@/lib/api/blog-api";
+import { BlogPost } from "@/lib/types";
 
 interface BlogProps {
   selectedCategory?: string;
 }
 
 function Blog({ selectedCategory = "All" }: BlogProps) {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
+  const [selectedBlog, setSelectedBlog] = useState<BlogPost | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -33,10 +25,8 @@ function Blog({ selectedCategory = "All" }: BlogProps) {
 
         // Fetch only published blogs
         const response = await api.article.list({
-          type: "BLOG",
-          mode: "PUBLISHED",
+          status: "published",
         });
-
         setBlogs(response);
       } catch (err) {
         console.error("Failed to fetch blogs:", err);
@@ -48,17 +38,6 @@ function Blog({ selectedCategory = "All" }: BlogProps) {
 
     fetchBlogs();
   }, []);
-
-  // Helper function to extract text from HTML content
-  const getDescription = (htmlContent: string) => {
-    if (!htmlContent) return "";
-    // Remove HTML tags and decode entities
-    const text = htmlContent
-      .replace(/<[^>]*>/g, "")
-      .replace(/&nbsp;/g, " ")
-      .trim();
-    return text.substring(0, 150) + (text.length > 150 ? "..." : "");
-  };
 
   // Format date
   const formatDate = (dateString: string | null) => {
@@ -103,10 +82,10 @@ function Blog({ selectedCategory = "All" }: BlogProps) {
       return true;
     }
     // Check if blog has the selected tag
-    return blog.tags && blog.tags.some((tag) => tag === selectedCategory);
+    return blog.tags && blog.tags.some((tag) => tag.name === selectedCategory);
   });
 
-  const handleBlogClick = (blog: Blog) => {
+  const handleBlogClick = (blog: BlogPost) => {
     setSelectedBlog(blog);
     setIsModalOpen(true);
   };
@@ -145,7 +124,7 @@ function Blog({ selectedCategory = "All" }: BlogProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredBlogs.map((blog) => (
             <div
-              key={blog.id}
+              key={blog._id}
               className="rounded-2xl overflow-hidden cursor-pointer transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg"
               onClick={() => handleBlogClick(blog)}
               onKeyDown={(event) => {
@@ -168,7 +147,7 @@ function Blog({ selectedCategory = "All" }: BlogProps) {
                 {blog.tags && blog.tags.length > 0 && (
                   <div className="absolute top-4 left-4">
                     <span className="bg-white text-button px-4 py-2 rounded-full text-sm font-medium">
-                      {blog.tags[0]}
+                      {blog.tags[0].name}
                     </span>
                   </div>
                 )}
@@ -178,9 +157,11 @@ function Blog({ selectedCategory = "All" }: BlogProps) {
                   {blog.title}
                 </h3>
                 <p className="text-gray-500 description mb-2 line-clamp-3">
-                  {getDescription(blog.content)}
+                  {blog.description}
                 </p>
-                <p className="text-gray-400 text-sm">{formatDate(blog.time)}</p>
+                <p className="text-gray-400 text-sm">
+                  {formatDate(blog.createdAt)}
+                </p>
               </div>
             </div>
           ))}
@@ -213,17 +194,17 @@ function Blog({ selectedCategory = "All" }: BlogProps) {
                   {selectedBlog.title}
                 </h2>
                 <span className="text-gray-400 text-sm">
-                  {formatDate(selectedBlog.time)}
+                  {formatDate(selectedBlog.createdAt)}
                 </span>
               </div>
               {selectedBlog.tags && selectedBlog.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2">
-                  {selectedBlog.tags.map((tag) => (
+                  {selectedBlog.tags.map(({ _id, name }) => (
                     <span
-                      key={tag}
+                      key={_id}
                       className="bg-button text-white px-3 py-1 rounded-full text-xs uppercase tracking-wide"
                     >
-                      {tag}
+                      {name}
                     </span>
                   ))}
                 </div>

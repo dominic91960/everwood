@@ -1,6 +1,6 @@
-// API configuration and helper functions
+import { BlogPostPayload } from "../types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 export const api = {
   baseUrl: API_BASE_URL,
@@ -21,7 +21,7 @@ export const api = {
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(
-          errorData.error || `HTTP error! status: ${response.status}`,
+          errorData.error || `HTTP error! status: ${response.status}`
         );
       }
 
@@ -35,63 +35,37 @@ export const api = {
   // Blog/Content endpoints
   article: {
     // Create new content/blog
-    async create(data: {
-      title: string;
-      content: string;
-      tags?: string[];
-      categories?: string[];
-      type: string;
-      location?: string;
-      time?: string;
-      thumbnail?: string;
-      mode: "DRAFT" | "PUBLISHED";
-      seoTitle?: string;
-      metaDescription?: string;
-      metaKeywords?: string[];
-    }) {
-      return api.fetchJson("/article", {
+    async create(data: BlogPostPayload) {
+      return api.fetchJson("/blog-post", {
         method: "POST",
         body: JSON.stringify(data),
       });
     },
 
     // Get all contents with optional filters
-    async list(params?: { mode?: string; type?: string; category?: string }) {
+    async list(params?: {
+      isFeatured?: boolean;
+      status?: "draft" | "published";
+    }) {
       const queryParams = new URLSearchParams();
-      if (params?.mode) queryParams.append("mode", params.mode);
-      if (params?.type) queryParams.append("type", params.type);
-      if (params?.category) queryParams.append("category", params.category);
+      if (params?.isFeatured)
+        queryParams.append("isFeatured", params.isFeatured.toString());
+      if (params?.status) queryParams.append("status", params.status);
 
       const queryString = queryParams.toString();
-      const endpoint = `/article${queryString ? `?${queryString}` : ""}`;
+      const endpoint = `/blog-post${queryString ? `?${queryString}` : ""}`;
 
       return api.fetchJson(endpoint);
     },
 
     // Get single content by ID
     async getById(id: string) {
-      return api.fetchJson(`/article/${id}`);
+      return api.fetchJson(`/blog-post/${id}`);
     },
 
     // Update content
-    async update(
-      id: string,
-      data: Partial<{
-        title: string;
-        content: string;
-        tags?: string[];
-        categories?: string[];
-        type: string;
-        location?: string;
-        time?: string;
-        thumbnail?: string;
-        mode: "DRAFT" | "PUBLISHED";
-        seoTitle?: string;
-        metaDescription?: string;
-        metaKeywords?: string[];
-      }>,
-    ) {
-      return api.fetchJson(`/article/${id}`, {
+    async update(id: string, data: BlogPostPayload) {
+      return api.fetchJson(`/blog-post/${id}`, {
         method: "PUT",
         body: JSON.stringify(data),
       });
@@ -99,14 +73,9 @@ export const api = {
 
     // Delete content
     async delete(id: string) {
-      return api.fetchJson(`/article/${id}`, {
+      return api.fetchJson(`/blog-post/${id}`, {
         method: "DELETE",
       });
-    },
-
-    // Get upcoming blog
-    async getUpcomingBlog() {
-      return api.fetchJson("/article/upcoming-blog");
     },
   },
 };
