@@ -108,31 +108,19 @@ export const columns: ColumnDef<BlogPost>[] = [
     accessorKey: "thumbnailImage",
     header: "Thumbnail Image",
     cell: ({ row }) => (
-      <div className="h-16 w-16 overflow-hidden rounded-lg">
-        <Image
-          src={row.original.thumbnail}
-          alt={row.original.title}
-          width={64}
-          height={64}
-          className="h-full w-full object-contain"
-        />
-      </div>
+      <Image
+        src={row.original.thumbnail}
+        alt=""
+        width={64}
+        height={64}
+        className="h-16 w-16 object-contain rounded-lg border border-black/20"
+      />
     ),
   },
   {
     accessorKey: "content",
     header: "Description",
-    cell: ({ row }) => {
-      const content = row.original.content;
-      return (
-        <div
-          className="prose line-clamp-3 max-w-none"
-          dangerouslySetInnerHTML={{
-            __html: typeof content === "string" ? content : "",
-          }}
-        />
-      );
-    },
+    cell: ({ row }) => <span>{row.original.description}</span>,
   },
   {
     accessorKey: "status",

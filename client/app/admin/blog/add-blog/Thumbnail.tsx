@@ -1,14 +1,14 @@
 import { useState } from "react";
-import Addimage from "./Addimage.png";
 import Image from "next/image";
+import { MdModeEdit } from "react-icons/md";
+import Addimage from "./Addimage.png";
 
 interface ThumbnailProps {
   onChange: (file: File) => void;
   currentThumbnail?: string;
-  isEdit?: boolean;
 }
 
-const Thumbnail = ({ onChange, currentThumbnail, isEdit }: ThumbnailProps) => {
+const Thumbnail = ({ onChange, currentThumbnail }: ThumbnailProps) => {
   const [preview, setPreview] = useState(currentThumbnail ?? null);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
@@ -21,33 +21,14 @@ const Thumbnail = ({ onChange, currentThumbnail, isEdit }: ThumbnailProps) => {
 
   return (
     <div className="space-y-4">
-      {preview && (
-        <div className="group relative">
+      <div className="flex items-center gap-4">
+        <label className="relative">
           <Image
-            src={preview}
+            src={preview ?? Addimage}
             alt=""
             width={400}
             height={300}
-            className="h-auto w-full max-w-md rounded-lg border border-gray-200 shadow-lg"
-          />
-          {!isEdit && (
-            <div className="bg-opacity-50 absolute inset-0 hidden items-center justify-center rounded-lg bg-black group-hover:flex">
-              <span className="text-sm text-white">Click to change image</span>
-            </div>
-          )}
-        </div>
-      )}
-
-      <div className="flex items-center gap-4">
-        <label
-          className={`cursor-pointer ${
-            isEdit ? "cursor-not-allowed opacity-50" : ""
-          }`}
-        >
-          <Image
-            src={Addimage}
-            alt="Add image"
-            className="h-20 w-20 rounded-lg object-cover"
+            className="h-40 w-40 rounded-lg object-contain border border-gray-400"
           />
           <input
             type="file"
@@ -55,6 +36,10 @@ const Thumbnail = ({ onChange, currentThumbnail, isEdit }: ThumbnailProps) => {
             onChange={handleFileChange}
             className="hidden"
           />
+
+          {preview && (
+            <MdModeEdit className="absolute bottom-2 right-2 text-[2em] opacity-80 hover:opacity-100" />
+          )}
         </label>
       </div>
     </div>

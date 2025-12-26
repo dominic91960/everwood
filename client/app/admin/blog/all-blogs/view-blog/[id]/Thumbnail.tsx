@@ -24,8 +24,8 @@ const Thumbnail = ({ onChange, currentThumbnail, isEdit }: ThumbnailProps) => {
     <div className="space-y-4">
       <div className="flex items-center gap-4">
         <label
-          className={`cursor-pointer relative ${
-            !isEdit ? "cursor-not-allowed" : ""
+          className={`relative ${
+            !isEdit ? "cursor-not-allowed" : "cursor-pointer"
           }`}
         >
           <Image
@@ -40,6 +40,7 @@ const Thumbnail = ({ onChange, currentThumbnail, isEdit }: ThumbnailProps) => {
             accept="image/*"
             onChange={handleFileChange}
             className="hidden"
+            disabled={!isEdit}
           />
 
           {isEdit && (

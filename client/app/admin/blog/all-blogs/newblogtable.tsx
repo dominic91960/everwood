@@ -100,21 +100,6 @@ const AdminDashboardPage: React.FC = () => {
                 />
                 <FaSearch className="absolute top-1/2 left-3 -translate-y-1/2 transform text-black" />
               </div>
-
-              {/* Status Filter */}
-              {/* <div className="relative bg-[#F9FBFF] rounded-2xl mt-[7px]">
-                <label className="text-[12px]">Status:</label>
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-2 py-1 text-[12px] bg-[#F9FBFF]"
-                >
-                  <option value="all">All</option>
-                  <option value="Published" className="text-[#00AC4F] font-poppins">Published</option>
-                  <option value="Draft" className="text-[#0F5FC2] font-poppins">Draft</option>
-                  <option value="Archived" className="text-[#D0004B] font-poppins">Archived</option>
-                </select>
-              </div> */}
             </div>
           </div>
 

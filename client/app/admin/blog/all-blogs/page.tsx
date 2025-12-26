@@ -7,13 +7,9 @@ import NewStudentTable from "./newblogtable";
 const AdminDashboardPage: React.FC = () => {
   return (
     <div className="overflow-hidden">
-      {/* Main content */}
       <div className=" flex-1 py-4">
         <NewStudentTable />
       </div>
-      {/* <div className="flex-1 py-4">
-        <AcceptTable />
-      </div> */}
     </div>
   );
 };

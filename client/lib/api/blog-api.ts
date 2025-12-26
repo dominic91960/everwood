@@ -66,7 +66,7 @@ export const api = {
     async update(id: string, data: FormData) {
       return api.fetchJson(`/blog-post/${id}`, {
         method: "PUT",
-        body: JSON.stringify(data),
+        body: data,
       });
     },
 

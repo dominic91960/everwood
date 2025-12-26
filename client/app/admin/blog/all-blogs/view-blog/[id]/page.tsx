@@ -9,6 +9,9 @@ import {
 } from "next/navigation";
 import dynamic from "next/dynamic";
 
+// Import Quill CSS - THIS IS CRITICAL
+import "quill/dist/quill.snow.css";
+
 import Thumbnail from "./Thumbnail";
 import AddButton from "./AddButton";
 import api from "@/lib/api/blog-api";
@@ -41,12 +44,8 @@ function QuillEditor() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Quill configuration with full toolbar (direct quill usage)
   const editorRef = useRef<HTMLDivElement | null>(null);
-  const quillInstanceRef = useRef<{
-    root: { innerHTML: string };
-    on: (event: string, callback: () => void) => void;
-  } | null>(null);
+  const quillInstanceRef = useRef<any>(null);
 
   const quillModules = useMemo(
     () => ({
@@ -99,18 +98,36 @@ function QuillEditor() {
         setLoading(true);
         setError(null);
 
-        const Quill = (await import("quill")).default;
+        const [blogPostResponse, categoryResponse, tagResponse] =
+          await Promise.all([
+            api.article.getById(contentId),
+            api.category.list(),
+            api.tag.list(),
+          ]);
 
-        if (editorRef.current) {
+        setBlogPostData({
+          ...blogPostResponse,
+          thumbnailFile: null,
+          category: blogPostResponse.category._id,
+          tags: blogPostResponse.tags.map(({ _id }: { _id: string }) => _id),
+        });
+        setCategories(categoryResponse);
+        setTags(tagResponse);
+
+        const Quill = (await import("quill")).default;
+        if (editorRef.current && !quillInstanceRef.current) {
           quillInstanceRef.current = new Quill(editorRef.current, {
             theme: "snow",
             modules: quillModules,
             formats: quillFormats,
-          }) as {
-            root: { innerHTML: string };
-            on: (event: string, callback: () => void) => void;
-          };
+          });
 
+          // Set initial content
+          if (blogPostResponse.content) {
+            quillInstanceRef.current.root.innerHTML = blogPostResponse.content;
+          }
+
+          // Listen for changes
           quillInstanceRef.current.on("text-change", () => {
             if (quillInstanceRef.current) {
               const content = quillInstanceRef.current.root.innerHTML;
@@ -121,15 +138,6 @@ function QuillEditor() {
             }
           });
         }
-
-        const blogPostResponse = await api.article.getById(contentId);
-        setBlogPostData({ ...blogPostResponse, thumbnailFile: null });
-
-        const categoryResponse = await api.category.list();
-        setCategories(categoryResponse);
-
-        const tagResponse = await api.tag.list();
-        setTags(tagResponse);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch blogs");
       } finally {
@@ -137,20 +145,26 @@ function QuillEditor() {
       }
     };
     fetchData();
+
+    return () => {
+      if (quillInstanceRef.current) quillInstanceRef.current = null;
+    };
   }, [quillModules, quillFormats, contentId]);
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
+    console.log(blogPostData);
+
     try {
       if (!blogPostData.title.trim()) throw new Error("Blog title is required");
       else if (!blogPostData.description.trim())
         throw new Error("Blog description is required");
-      else if (!blogPostData.thumbnailFile)
+      else if (!blogPostData.thumbnailFile && !blogPostData.thumbnail)
         throw new Error("Blog thumbnail image is required");
       else if (!blogPostData.content.trim())
         throw new Error("Blog content is required");
-      else if (!blogPostData.category.trim())
+      else if (!blogPostData.category)
         throw new Error("Please select a blog category");
       else if (blogPostData.tags.length === 0)
         throw new Error("Please select blog tags");
@@ -158,7 +172,9 @@ function QuillEditor() {
       const formData = new FormData();
       formData.append("title", blogPostData.title);
       formData.append("description", blogPostData.description);
-      formData.append("thumbnail", blogPostData.thumbnailFile);
+      if (blogPostData.thumbnailFile) {
+        formData.append("thumbnail", blogPostData.thumbnailFile);
+      }
       formData.append("content", blogPostData.content);
       formData.append("category", blogPostData.category);
       formData.append("tags", JSON.stringify(blogPostData.tags));
@@ -166,7 +182,7 @@ function QuillEditor() {
       formData.append("status", blogPostData.status);
 
       await api.article.update(contentId, formData);
-      alert("Blog post created successfully!");
+      alert("Blog post updated successfully!");
       router.push("/admin/blog/all-blogs");
     } catch (error: unknown) {
       console.error("Operation failed:", error);
@@ -222,6 +238,7 @@ function QuillEditor() {
                   }
                   className="w-full rounded-3xl border border-[#4796A9] p-1 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
                   required
+                  disabled={!isEdit}
                 />
                 <div className="mt-4">
                   <label
@@ -242,6 +259,7 @@ function QuillEditor() {
                     }
                     rows={4}
                     className="w-full rounded-3xl border border-[#4796A9] p-1 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                    disabled={!isEdit}
                   />
                 </div>
               </div>
@@ -266,7 +284,10 @@ function QuillEditor() {
                 <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">
                   Content
                 </h2>
-                <div className="overflow-hidden rounded-lg border">
+                <div className="overflow-hidden rounded-lg border relative">
+                  {!isEdit && (
+                    <div className="absolute inset-0 cursor-not-allowed z-50"></div>
+                  )}
                   <div ref={editorRef} style={{ height: "500px" }} />
                 </div>
               </div>
@@ -288,17 +309,26 @@ function QuillEditor() {
                       }))
                     }
                     className="w-full rounded-3xl border border-[#4796A9] bg-transparent p-1 pl-[3%]"
+                    disabled={!isEdit}
                   >
                     <option value="draft">Draft</option>
                     <option value="published">Published</option>
                   </select>
 
-                  <AddButton
-                    identifier="gallery-upload"
-                    buttonText={isSubmitting ? "Saving..." : "Add Blog"}
-                    className="w-full"
-                    onClick={handleSubmit}
-                  />
+                  {isEdit ? (
+                    <AddButton
+                      identifier="update-blog-btn"
+                      buttonText={isSubmitting ? "Updating..." : "Update"}
+                      onClick={handleSubmit}
+                      disabled={isSubmitting}
+                    />
+                  ) : (
+                    <AddButton
+                      identifier="edit-blog-btn"
+                      buttonText="Edit"
+                      onClick={() => router.push(`${pathname}?isEdit=true`)}
+                    />
+                  )}
                 </div>
               </div>
 
@@ -317,10 +347,11 @@ function QuillEditor() {
                       }))
                     }
                     className="w-full rounded-3xl border border-[#4796A9] bg-transparent p-1 pl-[3%] focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    disabled={!isEdit}
                   >
-                    <option value="">Select a tag</option>
+                    <option value="">Select a category</option>
                     {categories.map(({ _id, name }) => (
-                      <option key={_id} value="Living">
+                      <option key={_id} value={_id}>
                         {name}
                       </option>
                     ))}
@@ -336,18 +367,19 @@ function QuillEditor() {
                 </h2>
                 {tags.length > 0 && (
                   <select
-                    value={blogPostData.tags[0]}
+                    value={blogPostData.tags[0] || ""}
                     onChange={(e) =>
                       setBlogPostData((prev) => ({
                         ...prev,
-                        tags: [e.target.value],
+                        tags: e.target.value ? [e.target.value] : [],
                       }))
                     }
                     className="w-full rounded-3xl border border-[#4796A9] bg-transparent p-1 pl-[3%] focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    disabled={!isEdit}
                   >
                     <option value="">Select a tag</option>
                     {tags.map(({ _id, name }) => (
-                      <option key={_id} value="Living">
+                      <option key={_id} value={_id}>
                         {name}
                       </option>
                     ))}

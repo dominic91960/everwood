@@ -11,7 +11,6 @@ import { BlogPostPayload, BlogPostCategory, BlogPostTag } from "@/lib/types";
 function QuillEditor() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,12 +29,8 @@ function QuillEditor() {
     status: "draft",
   });
 
-  // Quill configuration with full toolbar (direct quill usage)
   const editorRef = useRef<HTMLDivElement | null>(null);
-  const quillInstanceRef = useRef<{
-    root: { innerHTML: string };
-    on: (event: string, callback: () => void) => void;
-  } | null>(null);
+  const quillInstanceRef = useRef<any>(null);
 
   const quillModules = useMemo(
     () => ({
@@ -82,12 +77,7 @@ function QuillEditor() {
     []
   );
 
-  // Initialize Quill and handle content changes (client-only)
   useEffect(() => {
-    setIsMounted(true);
-
-    let isCancelled = false;
-
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -98,60 +88,35 @@ function QuillEditor() {
 
         const tagResponse = await api.tag.list();
         setTags(tagResponse);
+
+        const Quill = (await import("quill")).default;
+        if (editorRef.current && !quillInstanceRef.current) {
+          quillInstanceRef.current = new Quill(editorRef.current, {
+            theme: "snow",
+            modules: quillModules,
+            formats: quillFormats,
+          });
+
+          quillInstanceRef.current.on("text-change", () => {
+            if (quillInstanceRef.current) {
+              const content = quillInstanceRef.current.root.innerHTML;
+              setBlogPostData((prev) => ({
+                ...prev,
+                content,
+              }));
+            }
+          });
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch blogs");
       } finally {
         setLoading(false);
       }
     };
-
-    const initQuill = async () => {
-      if (
-        typeof window !== "undefined" &&
-        editorRef.current &&
-        !quillInstanceRef.current &&
-        !isCancelled
-      ) {
-        try {
-          // Dynamically import Quill only on client side
-          const Quill = (await import("quill")).default;
-          // CSS is already loaded globally
-
-          if (!isCancelled && editorRef.current) {
-            quillInstanceRef.current = new Quill(editorRef.current, {
-              theme: "snow",
-              modules: quillModules,
-              formats: quillFormats,
-            }) as {
-              root: { innerHTML: string };
-              on: (event: string, callback: () => void) => void;
-            };
-
-            quillInstanceRef.current.on("text-change", () => {
-              if (quillInstanceRef.current) {
-                const content = quillInstanceRef.current.root.innerHTML;
-                setBlogPostData((prev) => ({
-                  ...prev,
-                  content,
-                }));
-              }
-            });
-          }
-        } catch (error) {
-          console.error("Failed to initialize Quill:", error);
-        }
-      }
-    };
-
-    // Small delay to ensure DOM is ready
-    const timer = setTimeout(() => {
-      initQuill();
-      fetchData();
-    }, 100);
+    fetchData();
 
     return () => {
-      isCancelled = true;
-      clearTimeout(timer);
+      if (quillInstanceRef.current) quillInstanceRef.current = null;
     };
   }, [quillModules, quillFormats]);
 
@@ -166,7 +131,7 @@ function QuillEditor() {
         throw new Error("Blog thumbnail image is required");
       else if (!blogPostData.content.trim())
         throw new Error("Blog content is required");
-      else if (!blogPostData.category.trim())
+      else if (!blogPostData.category)
         throw new Error("Please select a blog category");
       else if (blogPostData.tags.length === 0)
         throw new Error("Please select blog tags");
@@ -281,16 +246,7 @@ function QuillEditor() {
                   Content
                 </h2>
                 <div className="overflow-hidden rounded-lg border">
-                  {isMounted ? (
-                    <div ref={editorRef} style={{ height: "500px" }} />
-                  ) : (
-                    <div
-                      style={{ height: "500px" }}
-                      className="flex items-center justify-center text-gray-500"
-                    >
-                      Loading editor...
-                    </div>
-                  )}
+                  <div ref={editorRef} style={{ height: "500px" }} />
                 </div>
               </div>
             </div>
@@ -343,7 +299,7 @@ function QuillEditor() {
                   >
                     <option value="">Select a tag</option>
                     {categories.map(({ _id, name }) => (
-                      <option key={_id} value="Living">
+                      <option key={_id} value={_id}>
                         {name}
                       </option>
                     ))}
@@ -370,7 +326,7 @@ function QuillEditor() {
                   >
                     <option value="">Select a tag</option>
                     {tags.map(({ _id, name }) => (
-                      <option key={_id} value="Living">
+                      <option key={_id} value={_id}>
                         {name}
                       </option>
                     ))}
