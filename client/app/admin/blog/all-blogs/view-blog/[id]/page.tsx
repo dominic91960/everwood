@@ -3,11 +3,16 @@
 import { useState, useEffect } from "react";
 import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
-import { useSearchParams, useRouter, usePathname, useParams } from "next/navigation";
-import api from "@/lib/api";
+import {
+  useSearchParams,
+  useRouter,
+  usePathname,
+  useParams,
+} from "next/navigation";
+import api from "@/lib/api/blog-api";
 import Thumbnail from "./Thumbnail";
 
-import AddButton from './AddButton';
+import AddButton from "./AddButton";
 
 interface BlogData {
   id?: string;
@@ -66,41 +71,66 @@ export default function QuillEditor() {
         ["clean"],
         [{ font: [] }],
         [{ size: ["small", false, "large", "huge"] }],
-        [{ direction: "rtl" }]
-      ]
+        [{ direction: "rtl" }],
+      ],
     },
     formats: [
-      "header", "bold", "italic", "underline", "strike", "blockquote",
-      "code-block", "list", "indent", "link", "image", "video",
-      "color", "background", "script", "font", "size", "align", "direction"
-    ]
+      "header",
+      "bold",
+      "italic",
+      "underline",
+      "strike",
+      "blockquote",
+      "code-block",
+      "list",
+      "indent",
+      "link",
+      "image",
+      "video",
+      "color",
+      "background",
+      "script",
+      "font",
+      "size",
+      "align",
+      "direction",
+    ],
   });
 
   // Fetch blog data from API and populate from sessionStorage
   useEffect(() => {
     const fetchBlogData = async () => {
       if (!contentId) return;
-      
+
       try {
         // Fetch from API first to get all data including tags
-        const blogData = await api.content.getById(contentId);
+        const blogData = await api.article.getById(contentId);
         setTitle(blogData.title || "");
         setContent(blogData.content || "");
         setThumbnailUrl(blogData.thumbnail || "");
         setSelectedTags(blogData.tags || []);
         setSelectedCategories(blogData.categories || []);
         setMode(blogData.mode || "DRAFT");
-        
+
         if (blogData.time) {
           const date = new Date(blogData.time);
           if (!isNaN(date.getTime())) {
             setBlogDate(date.toISOString().split("T")[0]);
           }
         }
-        
-        if (blogData.seoTitle) setSeoData(prev => ({ ...prev, seoTitle: blogData.seoTitle }));
-        if (blogData.metaDescription) setSeoData(prev => ({ ...prev, metaDescription: blogData.metaDescription }));
-        if (blogData.metaKeywords) setSeoData(prev => ({ ...prev, metaKeywords: blogData.metaKeywords }));
+
+        if (blogData.seoTitle)
+          setSeoData((prev) => ({ ...prev, seoTitle: blogData.seoTitle }));
+        if (blogData.metaDescription)
+          setSeoData((prev) => ({
+            ...prev,
+            metaDescription: blogData.metaDescription,
+          }));
+        if (blogData.metaKeywords)
+          setSeoData((prev) => ({
+            ...prev,
+            metaKeywords: blogData.metaKeywords,
+          }));
       } catch (error) {
         console.error("Failed to fetch blog data:", error);
         // Fallback to sessionStorage if API fails
@@ -108,7 +138,12 @@ export default function QuillEditor() {
           if (typeof window !== "undefined") {
             const raw = window.sessionStorage.getItem("selectedBlog");
             if (raw) {
-              const b = JSON.parse(raw) as { title?: string; content?: string; thumbnailImage?: string; date?: string };
+              const b = JSON.parse(raw) as {
+                title?: string;
+                content?: string;
+                thumbnailImage?: string;
+                date?: string;
+              };
               setTitle(b.title || "");
               setContent(b.content || "");
               setThumbnailUrl(b.thumbnailImage || "");
@@ -188,7 +223,7 @@ export default function QuillEditor() {
         metaDescription: seoData.metaDescription || undefined,
         metaKeywords: seoData.metaKeywords || undefined,
       };
-      await api.content.update(String(contentId), payload);
+      await api.article.update(String(contentId), payload);
       alert("Blog updated successfully.");
     } catch (e) {
       console.error(e);
@@ -210,7 +245,9 @@ export default function QuillEditor() {
               <input
                 type="text"
                 value={eventLocation}
-                onChange={isEdit ? (e) => setEventLocation(e.target.value) : undefined}
+                onChange={
+                  isEdit ? (e) => setEventLocation(e.target.value) : undefined
+                }
                 placeholder="Event Location"
                 className="w-full rounded-lg border p-3"
                 disabled={!isEdit}
@@ -218,7 +255,9 @@ export default function QuillEditor() {
               <input
                 type="datetime-local"
                 value={eventTime}
-                onChange={isEdit ? (e) => setEventTime(e.target.value) : undefined}
+                onChange={
+                  isEdit ? (e) => setEventTime(e.target.value) : undefined
+                }
                 className="w-full rounded-lg border p-3"
                 disabled={!isEdit}
               />
@@ -226,8 +265,12 @@ export default function QuillEditor() {
           )}
 
           <div className="rounded-3xl bg-white p-6 shadow-sm">
-            <h1 className="mb-8 font-bold text-[22px] text-[#201F31]">{isEdit ? "Edit News & Update" : "View News"}</h1>
-            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">News Title</h2>
+            <h1 className="mb-8 font-bold text-[22px] text-[#201F31]">
+              {isEdit ? "Edit News & Update" : "View News"}
+            </h1>
+            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">
+              News Title
+            </h2>
             <input
               type="text"
               value={title}
@@ -238,11 +281,15 @@ export default function QuillEditor() {
             />
             {/* Date input field */}
             <div className="mt-4">
-              <label className="block mb-2 text-sm font-medium text-gray-700">Date</label>
+              <label className="block mb-2 text-sm font-medium text-gray-700">
+                Date
+              </label>
               <input
                 type="date"
                 value={blogDate}
-                onChange={isEdit ? (e) => setBlogDate(e.target.value) : undefined}
+                onChange={
+                  isEdit ? (e) => setBlogDate(e.target.value) : undefined
+                }
                 className="w-full rounded-3xl border-[#4796A9] border p-1 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
                 disabled={!isEdit}
               />
@@ -250,7 +297,9 @@ export default function QuillEditor() {
           </div>
 
           <div className="rounded-xl bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">Thumbnail Image</h2>
+            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">
+              Thumbnail Image
+            </h2>
             <Thumbnail
               onThumbnailUpload={isEdit ? setThumbnailUrl : () => {}}
               initialThumbnail={thumbnailUrl}
@@ -258,7 +307,9 @@ export default function QuillEditor() {
           </div>
 
           <div className="rounded-xl bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">Description</h2>
+            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">
+              Description
+            </h2>
             <div className="overflow-hidden rounded-lg border">
               {isEdit ? (
                 <div ref={quillRef} style={{ height: "500px" }} />
@@ -275,11 +326,17 @@ export default function QuillEditor() {
         {/* Sidebar Column */}
         <div className="space-y-6">
           <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-[17px] text-[#201F31] font-semibold">Publish</h2>
+            <h2 className="mb-4 text-[17px] text-[#201F31] font-semibold">
+              Publish
+            </h2>
             <div className="space-y-6">
               <select
                 value={mode}
-                onChange={isEdit ? (e) => setMode(e.target.value as typeof mode) : undefined}
+                onChange={
+                  isEdit
+                    ? (e) => setMode(e.target.value as typeof mode)
+                    : undefined
+                }
                 className="w-full rounded-3xl border p-1 bg-transparent border-[#4796A9] pl-[3%]"
                 disabled={!isEdit}
               >
@@ -312,7 +369,9 @@ export default function QuillEditor() {
 
           {/* Tag Display/Edit */}
           <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">Tags</h2>
+            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">
+              Tags
+            </h2>
             {isEdit ? (
               <div>
                 <select

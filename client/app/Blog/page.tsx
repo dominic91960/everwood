@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Footer2 from "../component/Footer/Footer2";
 import { Navbar2 } from "../component/Navbar/Navbar2";
 import Image from "next/image";
@@ -9,10 +9,10 @@ import Blog2 from "@/public/image/Blog/Blog2.png";
 import BlogComponent from "../component/Blog/blog";
 
 function Page() {
-  const [activeCategory, setActiveCategory] = useState("All");
-  
+  // const [activeCategory, setActiveCategory] = useState("All");
+
   useEffect(() => {
-    document.title = 'Blog Everwood collection';
+    document.title = "Blog Everwood collection";
   }, []);
   return (
     <div className="font-poppins">
@@ -93,7 +93,7 @@ function Page() {
             <Image src={Blog3} alt="Blog" className="w-full h-auto" />
           </div>
         </div>
-        <BlogComponent selectedCategory={activeCategory} />
+        <BlogComponent selectedCategory={"All"} />
 
         <div className="margin-y relative">
           <Image

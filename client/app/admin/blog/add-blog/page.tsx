@@ -7,23 +7,8 @@ import Thumbnail from "./Thumbnail";
 // import TagInput from "./components/TagInput";
 // import CategoryInput from "./components/CategoryInput";
 // import SEOSettings from "./components/SEOSettings";
-import AddButton from './AddButton';
-import api from "@/lib/api";
-
-// interface BlogData {
-//   title: string;
-//   content: string;
-//   tags: string[];
-//   categories: string[];
-//   type: string;
-//   location?: string;
-//   time?: string;
-//   thumbnail?: string;
-//   mode: "DRAFT" | "PUBLISHED";
-//   seoTitle: string;
-//   metaDescription: string;
-//   metaKeywords: string[];
-// }
+import AddButton from "./AddButton";
+import api from "@/lib/api/blog-api";
 
 function QuillEditor() {
   const router = useRouter();
@@ -49,51 +34,84 @@ function QuillEditor() {
 
   // Quill configuration with full toolbar (direct quill usage)
   const editorRef = useRef<HTMLDivElement | null>(null);
-  const quillInstanceRef = useRef<{ root: { innerHTML: string }; on: (event: string, callback: () => void) => void } | null>(null);
+  const quillInstanceRef = useRef<{
+    root: { innerHTML: string };
+    on: (event: string, callback: () => void) => void;
+  } | null>(null);
 
-  const quillModules = useMemo(() => ({
-    toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ color: [] }, { background: [] }],
-      [{ script: "sub" }, { script: "super" }],
-      ["blockquote", "code-block"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
-      ["link", "image", "video"],
-      ["clean"],
-      [{ font: [] }],
-      [{ size: ["small", false, "large", "huge"] }],
-      [{ direction: "rtl" }]
-    ]
-  }), []);
+  const quillModules = useMemo(
+    () => ({
+      toolbar: [
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        ["bold", "italic", "underline", "strike"],
+        [{ color: [] }, { background: [] }],
+        [{ script: "sub" }, { script: "super" }],
+        ["blockquote", "code-block"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
+        ["link", "image", "video"],
+        ["clean"],
+        [{ font: [] }],
+        [{ size: ["small", false, "large", "huge"] }],
+        [{ direction: "rtl" }],
+      ],
+    }),
+    [],
+  );
 
-  const quillFormats = useMemo(() => [
-    "header", "bold", "italic", "underline", "strike", "blockquote",
-    "code-block", "list", "indent", "link", "image", "video",
-    "color", "background", "script", "font", "size", "align", "direction"
-  ], []);
+  const quillFormats = useMemo(
+    () => [
+      "header",
+      "bold",
+      "italic",
+      "underline",
+      "strike",
+      "blockquote",
+      "code-block",
+      "list",
+      "indent",
+      "link",
+      "image",
+      "video",
+      "color",
+      "background",
+      "script",
+      "font",
+      "size",
+      "align",
+      "direction",
+    ],
+    [],
+  );
 
   // Initialize Quill and handle content changes (client-only)
   useEffect(() => {
     setIsMounted(true);
-    
+
     let isCancelled = false;
-    
+
     const initQuill = async () => {
-      if (typeof window !== 'undefined' && editorRef.current && !quillInstanceRef.current && !isCancelled) {
+      if (
+        typeof window !== "undefined" &&
+        editorRef.current &&
+        !quillInstanceRef.current &&
+        !isCancelled
+      ) {
         try {
           // Dynamically import Quill only on client side
           const Quill = (await import("quill")).default;
           // CSS is already loaded globally
-          
+
           if (!isCancelled && editorRef.current) {
             quillInstanceRef.current = new Quill(editorRef.current, {
               theme: "snow",
               modules: quillModules,
               formats: quillFormats,
-            }) as { root: { innerHTML: string }; on: (event: string, callback: () => void) => void };
-            
+            }) as {
+              root: { innerHTML: string };
+              on: (event: string, callback: () => void) => void;
+            };
+
             quillInstanceRef.current.on("text-change", () => {
               if (quillInstanceRef.current) {
                 setContent(quillInstanceRef.current.root.innerHTML);
@@ -120,18 +138,18 @@ function QuillEditor() {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     let uploadedImageUrl = "";
-    
+
     try {
       if (!title.trim()) {
-        throw new Error('Blog title is required');
+        throw new Error("Blog title is required");
       }
-      
+
       if (!content.trim()) {
-        throw new Error('Blog content is required');
+        throw new Error("Blog content is required");
       }
-      
+
       if (!thumbnailUrl) {
-        throw new Error('Thumbnail image is required');
+        throw new Error("Thumbnail image is required");
       }
 
       uploadedImageUrl = thumbnailUrl;
@@ -143,41 +161,46 @@ function QuillEditor() {
         categories: selectedCategories,
         type: contentType,
         location: contentType === "EVENTS" ? eventLocation : undefined,
-        time: blogDate ? new Date(blogDate).toISOString() : (contentType === "EVENTS" ? eventTime : undefined),
+        time: blogDate
+          ? new Date(blogDate).toISOString()
+          : contentType === "EVENTS"
+            ? eventTime
+            : undefined,
         thumbnail: uploadedImageUrl,
         mode,
         seoTitle: seoData.seoTitle,
         metaDescription: seoData.metaDescription,
         metaKeywords: seoData.metaKeywords,
       };
-      
+
       // Remove undefined fields (for non-events), but keep empty arrays for tags
-      Object.keys(payload).forEach(
-        (key) => {
-          const typedKey = key as keyof typeof payload;
-          if (payload[typedKey] === undefined) {
-            delete payload[typedKey];
-          }
+      Object.keys(payload).forEach((key) => {
+        const typedKey = key as keyof typeof payload;
+        if (payload[typedKey] === undefined) {
+          delete payload[typedKey];
         }
-      );
-      
+      });
+
       // Ensure tags is always an array (even if empty)
       if (!payload.tags) {
         payload.tags = [];
       }
-      
-      console.log('Submitting blog payload:', payload);
-      console.log('Selected tags:', selectedTags);
+
+      console.log("Submitting blog payload:", payload);
+      console.log("Selected tags:", selectedTags);
 
       // Call the API to create the blog post
-      const response = await api.content.create(payload);
-      console.log('Blog created successfully:', response);
-      
-      alert('Blog post created successfully!');
+      const response = await api.article.create(payload);
+      console.log("Blog created successfully:", response);
+
+      alert("Blog post created successfully!");
       router.push("/admin/blog/all-blogs");
     } catch (error: unknown) {
       console.error("Operation failed:", error);
-      const errorMessage = error instanceof Error ? error.message : 'An error occurred while saving content.';
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "An error occurred while saving content.";
       alert(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -185,10 +208,10 @@ function QuillEditor() {
   };
 
   return (
-    <div className="mx-auto container max-w-7xl py-8">
+    <div className="container mx-auto max-w-7xl py-8">
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Main Content Column */}
-        <div className="space-y-6 lg:col-span-2 bg-white shadow-[0px_10px_60px_rgba(226,236,249,0.5)] rounded-3xl">
+        <div className="space-y-6 rounded-3xl bg-white shadow-[0px_10px_60px_rgba(226,236,249,0.5)] lg:col-span-2">
           {contentType === "EVENT" && (
             <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
               <input
@@ -208,28 +231,36 @@ function QuillEditor() {
           )}
 
           <div className="rounded-3xl bg-white p-6 shadow-sm">
-            <h1 className="mb-8 font-bold text-[22px] text-[#201F31]">Add blog & Update</h1>
-            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">Blog Title</h2>
+            <h1 className="mb-8 text-[22px] font-bold text-[#201F31]">
+              Add blog & Update
+            </h1>
+            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">
+              Blog Title
+            </h2>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full rounded-3xl border-[#4796A9] border p-1 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-3xl border border-[#4796A9] p-1 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
               required
             />
             <div className="mt-4">
-              <label className="block mb-2 text-sm font-medium text-gray-700">Date</label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Date
+              </label>
               <input
                 type="date"
                 value={blogDate}
                 onChange={(e) => setBlogDate(e.target.value)}
-                className="w-full rounded-3xl border-[#4796A9] border p-1 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-3xl border border-[#4796A9] p-1 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
 
           <div className="rounded-xl bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">Thumbnail Image</h2>
+            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">
+              Thumbnail Image
+            </h2>
             <Thumbnail
               onThumbnailUpload={setThumbnailUrl}
               initialThumbnail={thumbnailUrl}
@@ -237,12 +268,17 @@ function QuillEditor() {
           </div>
 
           <div className="rounded-xl bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">Description</h2>
+            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">
+              Description
+            </h2>
             <div className="overflow-hidden rounded-lg border">
               {isMounted ? (
                 <div ref={editorRef} style={{ height: "500px" }} />
               ) : (
-                <div style={{ height: "500px" }} className="flex items-center justify-center text-gray-500">
+                <div
+                  style={{ height: "500px" }}
+                  className="flex items-center justify-center text-gray-500"
+                >
                   Loading editor...
                 </div>
               )}
@@ -253,12 +289,14 @@ function QuillEditor() {
         {/* Sidebar Column */}
         <div className="space-y-6">
           <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-[17px] text-[#201F31] font-semibold">Publish</h2>
+            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">
+              Publish
+            </h2>
             <div className="space-y-6">
               <select
                 value={mode}
                 onChange={(e) => setMode(e.target.value as typeof mode)}
-                className="w-full rounded-3xl border p-1 bg-transparent border-[#4796A9] pl-[3%]"
+                className="w-full rounded-3xl border border-[#4796A9] bg-transparent p-1 pl-[3%]"
               >
                 <option value="DRAFT">Draft</option>
                 <option value="PUBLISHED">Published</option>
@@ -267,7 +305,7 @@ function QuillEditor() {
               <AddButton
                 identifier="gallery-upload"
                 buttonText={isSubmitting ? "Saving..." : "Add Blog"}
-                className="w-full "
+                className="w-full"
                 onClick={handleSubmit}
               />
             </div>
@@ -280,7 +318,9 @@ function QuillEditor() {
 
           {/* Tag Dropdown */}
           <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">Tags</h2>
+            <h2 className="mb-4 text-[17px] font-semibold text-[#201F31]">
+              Tags
+            </h2>
             <select
               value={selectedTags[0] || ""}
               onChange={(e) => {
@@ -291,7 +331,7 @@ function QuillEditor() {
                   setSelectedTags([]);
                 }
               }}
-              className="w-full rounded-3xl border p-1 bg-transparent border-[#4796A9] pl-[3%] focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-3xl border border-[#4796A9] bg-transparent p-1 pl-[3%] focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
               <option value="">Select a tag</option>
               <option value="Living">Living</option>
@@ -343,9 +383,9 @@ function QuillEditor() {
 export default dynamic(() => Promise.resolve(QuillEditor), {
   ssr: false,
   loading: () => (
-    <div className="mx-auto container max-w-7xl py-8 flex items-center justify-center min-h-screen">
+    <div className="container mx-auto flex min-h-screen max-w-7xl items-center justify-center py-8">
       <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-blue-600"></div>
         <p className="text-gray-600">Loading editor...</p>
       </div>
     </div>
