@@ -10,7 +10,7 @@ export default function RootLayout({
 }>) {
   return (
     <AdminRouteGuard>
-      <div className="font-Tomorrow relative flex min-h-screen w-full overflow-hidden bg-[#0A0A1F]">
+      <div className="font-Tomorrow relative flex min-h-screen w-full overflow-hidden bg-white">
         {/* Top-left light accent */}
         <div className="absolute top-0 left-0 h-96 w-96 -translate-x-1/8 -translate-y-1/5 rounded-full bg-[#028EFC]/72 blur-[362px]"></div>
 
@@ -19,7 +19,7 @@ export default function RootLayout({
 
         <Sidebar />
         {/* Main content */}
-        <div className="relative z-10 container mx-auto flex flex-1 flex-col px-6 py-6 sm:px-16 sm:py-6">
+        <div className="relative z-10 container mx-auto flex flex-1 flex-col px-6 py-6 sm:px-16 sm:py-6 text-black">
           <Navbar />
           {children}
         </div>

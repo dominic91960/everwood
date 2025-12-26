@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { DataTable } from "./All-Orders/data-table";
-import { Order, columns } from "./All-Orders/columns";
+import { DataTable } from "./all-orders/data-table";
+import { Order, columns } from "./all-orders/columns";
 import { FaSearch } from "react-icons/fa";
 import { RiEyeLine } from "react-icons/ri";
 import { FiTrash2 } from "react-icons/fi";
 import ViewOrderDetails from "./view-order/ViewOrderDetails";
-import DeleteOrderModal from "./All-Orders/DeleteOrderModal";
+import DeleteOrderModal from "./all-orders/DeleteOrderModal";
 import { orderApi, Order as ApiOrder } from "@/lib/api/orderApi";
 import { toast } from "sonner";
 
@@ -121,7 +121,7 @@ export default function OrdersPage() {
           orderDate: new Date(apiOrder.createdAt).toLocaleDateString("en-GB"),
           paymentMethod: apiOrder.paymentMethod || "Unknown",
           status: apiOrder.status,
-        }),
+        })
       );
 
       setOrders(transformedOrders);
