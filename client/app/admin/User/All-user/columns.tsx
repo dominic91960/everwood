@@ -94,7 +94,7 @@ export const columns: ColumnDef<User>[] = [
           <div className="ml-[-25px] flex space-x-0">
             <Button
               onClick={() =>
-                router.push(`/admin/User/All-user/view-user/${row.original.id}`)
+                router.push(`/admin/user/all-user/view-user/${row.original.id}`)
               }
               className="rounded bg-transparent p-2 hover:bg-transparent focus:bg-transparent"
               aria-label="View user details"
@@ -103,7 +103,7 @@ export const columns: ColumnDef<User>[] = [
             </Button>
             <Button
               onClick={() =>
-                router.push(`/admin/User/All-user/edit-user/${row.original.id}`)
+                router.push(`/admin/user/all-user/edit-user/${row.original.id}`)
               }
               className="rounded bg-transparent p-2 hover:bg-transparent focus:bg-transparent"
               aria-label="Edit user details"

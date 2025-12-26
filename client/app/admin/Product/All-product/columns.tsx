@@ -17,23 +17,23 @@ type Product = {
 };
 
 // Action Buttons Component
-const ActionButtons = ({ 
-  productId, 
-  productName, 
-  onDelete 
-}: { 
-  productId: string; 
+const ActionButtons = ({
+  productId,
+  productName,
+  onDelete
+}: {
+  productId: string;
   productName: string;
   onDelete: (productId: string, productName: string) => void;
 }) => {
   const router = useRouter();
 
   const handleViewClick = () => {
-    router.push(`/admin/Product/All-product/view-product/${productId}`);
+    router.push(`/admin/product/all-product/view-product/${productId}`);
   };
 
   const handleEditClick = () => {
-    router.push(`/admin/Product/All-product/edit-product/${productId}`);
+    router.push(`/admin/product/all-product/edit-product/${productId}`);
   };
 
   const handleDeleteClick = () => {
@@ -73,8 +73,8 @@ export const createColumns = (onDelete: (productId: string, productName: string)
     header: "Product Image",
     cell: ({ row }) => {
       return (
-        <img 
-          src={row.original.productImage} 
+        <img
+          src={row.original.productImage}
           alt={row.original.productName}
           className="w-10 h-10 rounded-full object-cover"
         />
@@ -124,7 +124,7 @@ export const createColumns = (onDelete: (productId: string, productName: string)
             return 'text-blue-400 bg-blue-400/20';
         }
       };
-      
+
       return (
         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(status)}`}>
           {status}
@@ -137,8 +137,8 @@ export const createColumns = (onDelete: (productId: string, productName: string)
     header: "Action",
     cell: ({ row }) => {
       return (
-        <ActionButtons 
-          productId={row.original.id} 
+        <ActionButtons
+          productId={row.original.id}
           productName={row.original.productName}
           onDelete={onDelete}
         />

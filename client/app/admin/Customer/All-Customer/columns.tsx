@@ -108,7 +108,7 @@ export const columns: ColumnDef<Customer>[] = [
             <Button
               onClick={() =>
                 router.push(
-                  `/admin/Customer/All-Customer/view-customer/${row.original.id}`,
+                  `/admin/customer/all-customer/view-customer/${row.original.id}`,
                 )
               }
               className="rounded bg-transparent p-2 hover:bg-transparent focus:bg-transparent"
@@ -119,7 +119,7 @@ export const columns: ColumnDef<Customer>[] = [
             <Button
               onClick={() =>
                 router.push(
-                  `/admin/Customer/All-Customer/edit-customer/${row.original.id}`,
+                  `/admin/customer/all-customer/edit-customer/${row.original.id}`,
                 )
               }
               className="rounded bg-transparent p-2 hover:bg-transparent focus:bg-transparent"
