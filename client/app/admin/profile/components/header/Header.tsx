@@ -17,7 +17,7 @@ const Header = () => {
   return (
     <>
       <div className="flex items-center gap-[1.2em] text-[1.5em]">
-        <div className="border-primary relative rounded-full border-2 p-[4px]">
+        <div className="border-primary relative rounded-full border-2 p-1">
           <div className="bg-foreground/20 relative size-[3.5em] rounded-full">
             <Image
               src={user.avatar}

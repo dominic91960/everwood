@@ -2,14 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
-import { columns, Blog, ActionCell } from "./columns";
+import { columns, ActionCell } from "./columns";
 import { DataTable } from "./DataTable";
 import api from "@/lib/api/blog-api";
+import { BlogPost } from "@/lib/types";
 
 const AdminDashboardPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter] = useState("all");
-  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,41 +21,9 @@ const AdminDashboardPage: React.FC = () => {
         setLoading(true);
         setError(null);
 
-        // Fetch all blog type content
-        const response = await api.article.list({ type: "BLOG" });
-
-        console.log("Fetched blogs:", response);
-
-        // Transform API response to match Blog type
-        const transformedBlogs: Blog[] = response.map(
-          (item: {
-            id: string;
-            title?: string;
-            thumbnail?: string;
-            time?: string;
-            createdAt?: string;
-            mode?: string;
-            content?: string;
-          }) => ({
-            id: item.id,
-            title: item.title || "Untitled",
-            thumbnailImage: item.thumbnail || "/image/placeholder.jpg",
-            startTime: item.time
-              ? new Date(item.time).toLocaleTimeString()
-              : "",
-            date: item.time
-              ? new Date(item.time).toLocaleDateString()
-              : item.createdAt
-                ? new Date(item.createdAt).toLocaleDateString()
-                : new Date().toLocaleDateString(),
-            status: item.mode === "PUBLISHED" ? "Published" : "Draft",
-            content: item.content || "",
-          }),
-        );
-
-        setBlogs(transformedBlogs);
+        const response = await api.article.list();
+        setBlogs(response);
       } catch (err) {
-        console.error("Failed to fetch blogs:", err);
         setError(err instanceof Error ? err.message : "Failed to fetch blogs");
       } finally {
         setLoading(false);
@@ -65,7 +34,7 @@ const AdminDashboardPage: React.FC = () => {
   }, []);
 
   // Enhanced filtering logic
-  const filteredBlogs: Blog[] = blogs.filter((blog: Blog) => {
+  const filteredBlogs: BlogPost[] = blogs.filter((blog: BlogPost) => {
     // Status filter
     const statusMatches =
       statusFilter === "all" ||
@@ -83,7 +52,7 @@ const AdminDashboardPage: React.FC = () => {
   const handleDeleteBlog = async (id: string) => {
     try {
       await api.article.delete(id);
-      setBlogs((prev) => prev.filter((blog) => blog.id !== id));
+      setBlogs((prev) => prev.filter((blog) => blog._id !== id));
     } catch (err) {
       console.error("Failed to delete blog:", err);
       alert("Failed to delete blog. Please try again.");
@@ -94,11 +63,11 @@ const AdminDashboardPage: React.FC = () => {
     col.id === "actions"
       ? {
           ...col,
-          cell: (props: { row: { original: Blog } }) => (
+          cell: (props: { row: { original: BlogPost } }) => (
             <ActionCell row={props.row} handleDeleteBlog={handleDeleteBlog} />
           ),
         }
-      : col,
+      : col
   );
 
   return (
@@ -114,7 +83,7 @@ const AdminDashboardPage: React.FC = () => {
 
           <div className="grid flex-wrap gap-4 sm:mb-6 sm:items-center sm:justify-between sm:gap-2 md:flex">
             <div>
-              <h1 className="ml-[10px] text-[28px] font-bold sm:text-[24px] md:text-[26px] lg:text-[28px] 2xl:text-[22px]">
+              <h1 className="ml-2.5 text-[28px] font-bold sm:text-[24px] md:text-[26px] lg:text-[28px] 2xl:text-[22px]">
                 All Blogs {loading ? "(Loading...)" : `(${blogs.length})`}
               </h1>
             </div>
@@ -149,7 +118,7 @@ const AdminDashboardPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="mt-[10px] sm:mt-0">
+          <div className="mt-2.5 sm:mt-0">
             <DataTable columns={customColumns} data={filteredBlogs} />
           </div>
         </div>

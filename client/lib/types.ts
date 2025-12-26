@@ -164,12 +164,24 @@ export type StatisticsData = {
 export type BlogPostPayload = {
   title: string;
   description: string;
-  thumbnail: File;
+  thumbnailFile: File | null;
   content: string;
   category: string;
-  tags: string;
+  tags: string[];
   isFeatured: boolean;
   status: "draft" | "published";
+};
+
+export type BlogPostCategory = {
+  _id: string;
+  name: string;
+  description: string;
+};
+
+export type BlogPostTag = {
+  _id: string;
+  name: string;
+  description: string;
 };
 
 export type BlogPost = {
@@ -178,16 +190,8 @@ export type BlogPost = {
   description: string;
   thumbnail: string;
   content: string;
-  category: {
-    _id: string;
-    name: string;
-    description: string;
-  };
-  tags: {
-    _id: string;
-    name: string;
-    description: string;
-  }[];
+  category: BlogPostCategory;
+  tags: BlogPostTag[];
   isFeatured: boolean;
   status: "draft" | "published";
   createdAt: string;

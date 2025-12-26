@@ -8,23 +8,14 @@ import { useRouter } from "next/navigation";
 import DeletePopup from "./DeletePopup";
 import Image from "next/image";
 import api from "@/lib/api/blog-api";
-
-export type Blog = {
-  id: string;
-  title: string;
-  thumbnailImage: string;
-  startTime: string;
-  date: string;
-  status: "Published" | "Draft" | "Archived";
-  content: string;
-};
+import { BlogPost } from "@/lib/types";
 
 // ActionCell component
 export const ActionCell = ({
   row,
   handleDeleteBlog,
 }: {
-  row: { original: Blog };
+  row: { original: BlogPost };
   handleDeleteBlog?: (id: string) => Promise<void>;
 }) => {
   const router = useRouter();
@@ -36,7 +27,7 @@ export const ActionCell = ({
       if (typeof window !== "undefined") {
         window.sessionStorage.setItem(
           "selectedBlog",
-          JSON.stringify(row.original),
+          JSON.stringify(row.original)
         );
       }
     } catch {}
@@ -47,7 +38,7 @@ export const ActionCell = ({
       if (typeof window !== "undefined") {
         window.sessionStorage.setItem(
           "selectedBlog",
-          JSON.stringify(row.original),
+          JSON.stringify(row.original)
         );
       }
     } catch {}
@@ -59,9 +50,9 @@ export const ActionCell = ({
     setLoading(true);
     try {
       if (handleDeleteBlog) {
-        await handleDeleteBlog(row.original.id);
+        await handleDeleteBlog(row.original._id);
       } else {
-        await api.article.delete(row.original.id);
+        await api.article.delete(row.original._id);
       }
       setOpen(false);
     } catch (error) {
@@ -75,25 +66,25 @@ export const ActionCell = ({
   const handleClose = () => setOpen(false);
 
   return (
-    <div className="ml-[-10px] flex flex-wrap items-center gap-2">
+    <div className="-ml-2.5 flex flex-wrap items-center gap-2">
       <Button
         variant="outline"
-        onClick={() => handleViewClick(row.original.id)}
-        className="flex-shrink-0 !border-none !bg-transparent hover:!border-none hover:!bg-transparent"
+        onClick={() => handleViewClick(row.original._id)}
+        className="shrink-0 border-none! bg-transparent! hover:border-none! hover:bg-transparent!"
       >
         <RiEyeLine size={20} />
       </Button>
       <Button
         variant="outline"
-        onClick={() => handleEditClick(row.original.id)}
-        className="flex-shrink-0 !border-none !bg-transparent hover:!border-none hover:!bg-transparent"
+        onClick={() => handleEditClick(row.original._id)}
+        className="shrink-0 border-none! bg-transparent! hover:border-none! hover:bg-transparent!"
       >
         <RiEditLine size={20} />
       </Button>
       <Button
         variant="outline"
         onClick={handleDeleteClick}
-        className="flex-shrink-0 !border-none !bg-transparent hover:!border-none hover:!bg-transparent"
+        className="shrink-0 border-none! bg-transparent! hover:border-none! hover:bg-transparent!"
       >
         <RiDeleteBinLine size={20} />
       </Button>
@@ -108,7 +99,7 @@ export const ActionCell = ({
 };
 
 // Define table columns
-export const columns: ColumnDef<Blog>[] = [
+export const columns: ColumnDef<BlogPost>[] = [
   {
     accessorKey: "title",
     header: "Title",
@@ -119,11 +110,11 @@ export const columns: ColumnDef<Blog>[] = [
     cell: ({ row }) => (
       <div className="h-16 w-16 overflow-hidden rounded-lg">
         <Image
-          src={row.original.thumbnailImage}
+          src={row.original.thumbnail}
           alt={row.original.title}
           width={64}
           height={64}
-          className="h-full w-full object-cover"
+          className="h-full w-full object-contain"
         />
       </div>
     ),
