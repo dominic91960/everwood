@@ -93,10 +93,10 @@ const AllUsersTable = () => {
           <div className="grid flex-wrap gap-4 sm:mb-6 sm:items-center sm:justify-between sm:gap-2 md:flex">
             <div>
               <div className="flex items-center gap-4">
-                <h1 className="text-[28px] font-bold text-[#E5E5E5] sm:text-[24px] md:text-[26px] lg:text-[28px] xl:text-[30px]">
+                <h1 className="text-[28px] font-bold text-gray-900 sm:text-[24px] md:text-[26px] lg:text-[28px] xl:text-[30px]">
                   Users
                 </h1>
-                <span className="mt-2 text-[17px] font-semibold text-[#E5E5E5] sm:text-[18px] md:text-[19px] lg:text-[20px] xl:text-[20px]">
+                <span className="mt-2 text-[17px] font-semibold text-gray-700 sm:text-[18px] md:text-[19px] lg:text-[20px] xl:text-[20px]">
                   All User
                 </span>
               </div>
@@ -110,9 +110,9 @@ const AllUsersTable = () => {
                   placeholder="Search users..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-[220px] rounded-3xl border-[#FFFFFF33]/20 bg-[#0B1739] px-3 py-3 pl-10 text-[14px] md:w-[250px] lg:w-[280px] xl:w-[285px] 2xl:w-[285px]"
+                  className="w-[220px] rounded-3xl border border-gray-300 bg-white px-3 py-3 pl-10 text-[14px] text-gray-900 placeholder:text-gray-400 md:w-[250px] lg:w-[280px] xl:w-[285px] 2xl:w-[285px]"
                 />
-                <FaSearch className="absolute top-1/2 left-3 -translate-y-1/2 transform text-[14px] text-[#AEB9E1] xl:-translate-y-1" />
+                <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 transform text-[14px] text-gray-400 xl:-translate-y-1" />
               </div>
 
               {/* Refresh Button */}
@@ -188,7 +188,7 @@ const AllUsersTable = () => {
 
           {/* Loading and Error States */}
           {loading && (
-            <div className="mt-4 text-center text-[#E5E5E5]">
+            <div className="mt-4 text-center text-gray-600">
               Loading users...
             </div>
           )}

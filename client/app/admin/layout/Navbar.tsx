@@ -48,7 +48,7 @@ const Navbar = () => {
 
   return (
     <div className="container mx-auto mb-[1em] flex flex-col-reverse items-end sm:flex-row sm:justify-between">
-      <h1 className="hidden text-[#E5E5E5] sm:block">
+      <h1 className="hidden text-gray-700 sm:block">
         Welcome Back {user.firstName} 👋🏼
       </h1>
 

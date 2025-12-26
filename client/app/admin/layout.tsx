@@ -10,7 +10,7 @@ export default function RootLayout({
 }>) {
   return (
     <AdminRouteGuard>
-      <div className="font-Tomorrow relative flex min-h-screen w-full overflow-hidden bg-white">
+      <div className="admin-light font-Tomorrow relative flex min-h-screen w-full overflow-hidden bg-white">
         {/* Top-left light accent */}
         <div className="absolute top-0 left-0 h-96 w-96 -translate-x-1/8 -translate-y-1/5 rounded-full bg-[#028EFC]/72 blur-[362px]"></div>
 

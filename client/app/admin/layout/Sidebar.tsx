@@ -60,7 +60,7 @@ const Sidebar: React.FC = () => {
       {/* Sidebar */}
       <div className="h-screen xl:px-3 xl:py-3 2xl:px-5">
         <div
-          className={`fixed top-0 left-0 z-40 container mx-auto h-full w-[270px] overflow-auto rounded-2xl border border-white/10 bg-black/30 backdrop-blur-[500px] transition-transform md:w-[300px] xl:w-[300px] xl:px-3 2xl:w-[300px] ${
+          className={`fixed top-0 left-0 z-40 container mx-auto h-full w-[270px] overflow-auto rounded-2xl border border-gray-200 bg-white shadow-sm transition-transform md:w-[300px] xl:w-[300px] xl:px-3 2xl:w-[300px] ${
             isOpen ? "translate-x-0" : "-translate-x-full"
           } xl:relative xl:block xl:translate-x-0 2xl:translate-x-0`}
         >

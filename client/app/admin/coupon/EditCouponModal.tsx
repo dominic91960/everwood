@@ -34,7 +34,7 @@ export default function EditCouponModal({
 
   const fetchCoupon = async () => {
     if (!couponId) return;
-    
+
     try {
       setLoading(true);
       setError(null);
@@ -67,7 +67,7 @@ export default function EditCouponModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!couponId) return;
-    
+
     setIsSubmitting(true);
     setError(null);
 
@@ -86,23 +86,23 @@ export default function EditCouponModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-      <div className="bg-[#00000033]/20 backdrop-blur-[500px] rounded-2xl shadow-lg w-[650px] p-6 relative border border-[#172D6D]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="relative w-[650px] rounded-2xl border border-gray-200 bg-white p-6 shadow-xl">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-1 right-1 bg-[#028EFC47] p-2 border border-[#1E2A45] rounded-full w-8 h-8 flex items-center justify-center text-white hover:bg-[#1E2A45]"
+          className="absolute right-1 top-1 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white p-2 text-gray-600 hover:text-gray-900"
         >
           ✕
         </button>
 
         {/* Title */}
-        <h2 className="text-white text-2xl font-bold mb-6">Edit Coupons</h2>
+        <h2 className="mb-6 text-2xl font-bold text-gray-900">Edit Coupons</h2>
 
         {/* Loading State */}
         {loading && (
-          <div className="flex justify-center items-center h-32">
-            <div className="text-white">Loading coupon details...</div>
+          <div className="flex h-32 items-center justify-center">
+            <div className="text-gray-700">Loading coupon details...</div>
           </div>
         )}
 
@@ -119,38 +119,38 @@ export default function EditCouponModal({
             {/* Left Side */}
             <div className="space-y-4">
               <div>
-                <label className="block text-white mb-2 text-sm">Coupon Title</label>
+                <label className="mb-2 block text-sm text-gray-700">Coupon Title</label>
                 <input
                   type="text"
                   name="title"
                   value={formData.title}
                   onChange={handleInputChange}
                   required
-                  className="w-full h-10 px-3 text-[15px] bg-transparent border border-[#1E2A45] rounded-md text-white focus:outline-none focus:border-blue-500"
+                  className="h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-[15px] text-gray-900 focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-white mb-2 text-sm">Code</label>
+                <label className="mb-2 block text-sm text-gray-700">Code</label>
                 <input
                   type="text"
                   name="code"
                   value={formData.code}
                   onChange={handleInputChange}
                   required
-                  className="w-full h-10 px-3 text-[15px] bg-transparent border border-[#1E2A45] rounded-md text-white focus:outline-none focus:border-blue-500"
+                  className="h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-[15px] text-gray-900 focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-white mb-2 text-sm">Start Date</label>
+                <label className="mb-2 block text-sm text-gray-700">Start Date</label>
                 <input
                   type="date"
                   name="startDate"
                   value={formData.startDate}
                   onChange={handleInputChange}
                   required
-                  className="w-full h-10 px-3 text-[15px] bg-transparent border border-[#1E2A45] rounded-md text-white focus:outline-none focus:border-blue-500"
+                  className="h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-[15px] text-gray-900 focus:outline-none focus:border-blue-500"
                 />
               </div>
             </div>
@@ -158,25 +158,25 @@ export default function EditCouponModal({
             {/* Right Side */}
             <div className="space-y-4">
               <div>
-                <label className="block text-white mb-2 text-sm">Coupon Type</label>
+                <label className="mb-2 block text-sm text-gray-700">Coupon Type</label>
                 <select
                   name="couponType"
                   value={formData.couponType}
                   onChange={handleInputChange}
                   required
-                  className="w-full h-10 px-3 text-[15px] bg-transparent border border-[#1E2A45] rounded-md text-white focus:outline-none focus:border-blue-500"
+                  className="h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-[15px] text-gray-900 focus:outline-none focus:border-blue-500"
                 >
-                  <option value="percentage" className="bg-[#0A0F1C]">
+                  <option value="percentage">
                     Percentage
                   </option>
-                  <option value="exact" className="bg-[#0A0F1C]">
+                  <option value="exact">
                     Exact Amount
                   </option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-white mb-2 text-sm">Amount/Percentage</label>
+                <label className="mb-2 block text-sm text-gray-700">Amount/Percentage</label>
                 <input
                   type="number"
                   name="value"
@@ -184,19 +184,19 @@ export default function EditCouponModal({
                   onChange={handleInputChange}
                   required
                   min="0"
-                  className="w-full h-10 px-3 text-[15px] bg-transparent border border-[#1E2A45] rounded-md text-white focus:outline-none focus:border-blue-500"
+                  className="h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-[15px] text-gray-900 focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-white mb-2 text-sm">End Date</label>
+                <label className="mb-2 block text-sm text-gray-700">End Date</label>
                 <input
                   type="date"
                   name="endDate"
                   value={formData.endDate}
                   onChange={handleInputChange}
                   required
-                  className="w-full h-10 px-3 text-[15px] bg-transparent border border-[#1E2A45] rounded-md text-white focus:outline-none focus:border-blue-500"
+                  className="h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-[15px] text-gray-900 focus:outline-none focus:border-blue-500"
                 />
               </div>
             </div>
@@ -205,8 +205,8 @@ export default function EditCouponModal({
 
         {/* Submit Button */}
         <div className="flex justify-end mt-8">
-          <Editbutton 
-            identifier="edit-coupon" 
+          <Editbutton
+            identifier="edit-coupon"
             buttonText={isSubmitting ? "Updating..." : "Edit Coupon"}
             onClick={handleSubmit}
             disabled={isSubmitting || loading}

@@ -23,17 +23,17 @@ const DeleteUserModal: React.FC<DeleteUserModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
       />
-      
+
       {/* Modal */}
-      <div className="relative bg-[#0000004D]/90 backdrop-blur-[500px] border border-[#172D6D] rounded-xl p-6 w-full max-w-md mx-4">
+      <div className="relative mx-4 w-full max-w-md rounded-xl border border-gray-200 bg-white p-6 shadow-xl">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-[#94A3B8] hover:text-white transition-colors"
+          className="absolute right-4 top-4 text-gray-500 transition-colors hover:text-gray-900"
         >
           <FiX size={20} />
         </button>
@@ -46,14 +46,14 @@ const DeleteUserModal: React.FC<DeleteUserModalProps> = ({
         </div>
 
         {/* Title */}
-        <h3 className="text-xl font-bold text-[#E5E5E5] text-center mb-2">
+        <h3 className="mb-2 text-center text-xl font-bold text-gray-900">
           Delete User
         </h3>
 
         {/* Message */}
-        <p className="text-[#94A3B8] text-center mb-6">
-          Are you sure you want to delete <span className="text-white font-semibold">{userName}</span>? 
-         
+        <p className="mb-6 text-center text-gray-600">
+          Are you sure you want to delete <span className="font-semibold text-gray-900">{userName}</span>?
+
         </p>
 
         {/* Buttons */}
@@ -61,7 +61,7 @@ const DeleteUserModal: React.FC<DeleteUserModalProps> = ({
           <button
             onClick={onClose}
             disabled={isLoading}
-            className="flex-1 px-4 py-2 bg-[#334155] text-white rounded-md hover:bg-[#475569] transition-colors disabled:opacity-50"
+            className="flex-1 rounded-md bg-gray-100 px-4 py-2 text-gray-900 transition-colors hover:bg-gray-200 disabled:opacity-50"
           >
             Cancel
           </button>

@@ -98,10 +98,10 @@ const AllProductsTable = () => {
                     <div className="grid flex-wrap gap-4 sm:mb-6 sm:items-center sm:justify-between sm:gap-2 md:flex">
                         <div>
                             <div className="flex items-center gap-4">
-                                <h1 className="text-[28px] font-bold sm:text-[24px] md:text-[26px] lg:text-[28px] xl:text-[30px] text-[#E5E5E5]">
+                                <h1 className="text-[28px] font-bold text-gray-900 sm:text-[24px] md:text-[26px] lg:text-[28px] xl:text-[30px]">
                                     Coupons
                                 </h1>
-                                <span className="text-[17px] text-[#E5E5E5] font-semibold sm:text-[18px] md:text-[19px] lg:text-[20px] xl:text-[20px] mt-2">
+                                <span className="mt-2 text-[17px] font-semibold text-gray-700 sm:text-[18px] md:text-[19px] lg:text-[20px] xl:text-[20px]">
                                     All Coupons
                                 </span>
                             </div>
@@ -115,9 +115,9 @@ const AllProductsTable = () => {
                                     placeholder="Search For..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-[180px] rounded-3xl bg-[#0B1739] px-3 pl-10 py-3 md:w-[250px] lg:w-[280px] xl:w-[285px] 2xl:w-[285px] border-[#FFFFFF33]/20 text-[14px]"
+                                    className="w-[180px] rounded-3xl border border-gray-300 bg-white px-3 py-3 pl-10 text-[14px] text-gray-900 placeholder:text-gray-400 md:w-[250px] lg:w-[280px] xl:w-[285px] 2xl:w-[285px]"
                                 />
-                                <FaSearch className="absolute top-1/2 left-3 xl:-translate-y-1 -translate-y-1/2 transform text-[#AEB9E1] text-[14px]" />
+                                <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 transform text-[14px] text-gray-400 xl:-translate-y-1" />
                             </div>
 
                             {/* Status Filter */}
@@ -125,15 +125,15 @@ const AllProductsTable = () => {
                                 <select
                                     value={statusFilter}
                                     onChange={(e) => setStatusFilter(e.target.value)}
-                                    className="w-[150px] rounded-3xl bg-[#0B1739] px-4 py-3 border border-[#FFFFFF33]/20 text-[14px] text-white appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#AEB9E1]/50 focus:border-[#AEB9E1]/50 transition-all duration-200 hover:border-[#AEB9E1]/30"
+                                    className="w-[150px] rounded-3xl border border-gray-300 bg-white px-4 py-3 text-[14px] text-gray-900 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-gray-400 transition-all duration-200"
                                 >
-                                    <option value="" className="bg-[#0B1739] text-white py-2">All Status</option>
-                                    <option value="Active" className="bg-[#0B1739] text-white py-2">Active</option>
-                                    <option value="Expired" className="bg-[#0B1739] text-white py-2">Expired</option>
+                                    <option value="" className="py-2">All Status</option>
+                                    <option value="Active" className="py-2">Active</option>
+                                    <option value="Expired" className="py-2">Expired</option>
                                 </select>
                                 <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                                     <svg
-                                        className="w-4 h-4 text-[#AEB9E1] transition-transform duration-200"
+                                        className="h-4 w-4 text-gray-500 transition-transform duration-200"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
