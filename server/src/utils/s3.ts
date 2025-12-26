@@ -279,8 +279,8 @@ const changeThumbnailImage = async (
 
   const buffer = await sharp(file.buffer)
     .resize({
-      height: 250,
-      width: 250,
+      height: 950,
+      width: 550,
       fit: "cover",
     })
     .toFormat("png", {
