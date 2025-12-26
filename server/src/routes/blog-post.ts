@@ -31,7 +31,7 @@ router.get("/", validateGetBlogPosts, runValidation, getBlogPosts);
 router.get("/:id", validateIdParam, runValidation, getBlogPostById);
 router.put(
   "/:id",
-  multer.single("thumbnail"),
+  multer.single("newThumbnail"),
   parseJson("tags"),
   validateIdParam,
   validateUpdateBlogPost,

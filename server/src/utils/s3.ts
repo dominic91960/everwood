@@ -226,7 +226,10 @@ const changeProfileImage = async (
 ) => {
   const subfolder = generateSubfolderId();
   const imageId = generateImageId();
+
   let putKey = `users/${subfolder}/${imageId}.png`;
+  if (prevAvatar.startsWith(bucketUrl))
+    putKey = prevAvatar.replace(bucketUrl, "");
 
   const buffer = await sharp(file.buffer)
     .resize({
@@ -240,8 +243,6 @@ const changeProfileImage = async (
     })
     .toBuffer();
 
-  if (prevAvatar.startsWith(bucketUrl))
-    putKey = prevAvatar.replace(bucketUrl, "");
   const putCommand = new PutObjectCommand({
     Bucket: AWS_BUCKET_NAME,
     Key: putKey,
@@ -271,7 +272,10 @@ const changeThumbnailImage = async (
 ) => {
   const subfolder = generateSubfolderId();
   const imageId = generateImageId();
+
   let putKey = `blog-post-thumbnails/${subfolder}/${imageId}.png`;
+  if (prevThumbnail.startsWith(bucketUrl))
+    putKey = prevThumbnail.replace(bucketUrl, "");
 
   const buffer = await sharp(file.buffer)
     .resize({
@@ -285,8 +289,6 @@ const changeThumbnailImage = async (
     })
     .toBuffer();
 
-  if (prevThumbnail.startsWith(bucketUrl))
-    putKey = prevThumbnail.replace(bucketUrl, "");
   const putCommand = new PutObjectCommand({
     Bucket: AWS_BUCKET_NAME,
     Key: putKey,
@@ -295,8 +297,8 @@ const changeThumbnailImage = async (
   });
   await s3.send(putCommand);
 
-  const avatar = bucketUrl + putKey;
-  return avatar;
+  const thumbnail = bucketUrl + putKey;
+  return thumbnail;
 };
 
 const deleteThumbnailImage = async (prevAvatar: string) => {

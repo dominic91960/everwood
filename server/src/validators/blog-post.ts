@@ -50,7 +50,7 @@ export const validateCreateBlogPost: ValidationChain[] = [
   ...baseBlogPostValidation,
 
   body("thumbnail").custom((_, { req }) => {
-    const file = req.files as Express.Multer.File;
+    const file = req.file as Express.Multer.File;
     if (!file) throw new Error("Thumbnail image is required");
     if (!allowedImageTypes.includes(file.mimetype))
       throw new Error("Only JPEG, JPG, or PNG images are allowed");
@@ -67,7 +67,7 @@ export const validateUpdateBlogPost: ValidationChain[] = [
   body("newThumbnail")
     .optional()
     .custom((_, { req }) => {
-      const file = req.files as Express.Multer.File;
+      const file = req.file as Express.Multer.File;
       if (!file) throw new Error("Thumbnail image is required");
       if (!allowedImageTypes.includes(file.mimetype))
         throw new Error("Only JPEG, JPG, or PNG images are allowed");

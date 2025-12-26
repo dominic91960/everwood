@@ -19,7 +19,7 @@ const router = Router();
 router.post("/", validateCreateBlogCategory, runValidation, createBlogCategory);
 router.get("/", getBlogCategories);
 router.get("/:id", validateIdParam, runValidation, getBlogCategoryById);
-router.patch(
+router.put(
   "/:id",
   validateIdParam,
   validateUpdateBlogCategory,

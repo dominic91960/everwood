@@ -10,8 +10,15 @@ const createBlogPost = async (
 ) => {
   try {
     const file = req.file as Express.Multer.File;
-    const { title, description, content, category, tags, isFeatured, status } =
-      req.body;
+    const {
+      title,
+      description,
+      content,
+      category,
+      tags,
+      isFeatured = false,
+      status = "draft",
+    } = req.body;
 
     const thumbnail = await changeThumbnailImage("", file);
     const post = new BlogPost({
@@ -83,8 +90,15 @@ const updateBlogPost = async (
     if (!post) return res.status(404).json({ message: "Blog post not found" });
 
     const file = req.file;
-    const { title, description, content, category, tags, isFeatured, status } =
-      req.body;
+    const {
+      title,
+      description,
+      content,
+      category,
+      tags,
+      isFeatured = false,
+      status = "draft",
+    } = req.body;
 
     let thumbnail: string | null = null;
     if (file) thumbnail = await changeThumbnailImage(post.thumbnail, file);

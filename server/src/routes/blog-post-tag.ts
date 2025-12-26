@@ -19,7 +19,7 @@ const router = Router();
 router.post("/", validateCreateBlogTag, runValidation, createBlogTag);
 router.get("/", getBlogTags);
 router.get("/:id", validateIdParam, runValidation, getBlogTagById);
-router.patch(
+router.put(
   "/:id",
   validateIdParam,
   validateUpdateBlogTag,
