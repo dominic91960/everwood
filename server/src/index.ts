@@ -1,88 +1,67 @@
-import express, { Application, Request, Response } from "express";
-import dotenv from "dotenv";
+/* eslint-disable no-console */
+import express, { Application } from "express";
 import cors from "cors";
-import cookieParser from "cookie-parser";
-import { PrismaClient } from "@prisma/client";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
 
-import { generalLimiter, contactLimiter } from "./config/rate-limit";
-import contentRoutes from "./content/routes";
-import contactRoutes from "./contact/routes";
-import notifyRoutes from "./notify/routes";
+dotenv.config({ quiet: true });
 
-// Load environment variables
-dotenv.config();
+import { contactLimiter, generalLimiter } from "./middleware/rate-limit";
+import contactRoutes from "./routes/contact";
+import userRoleRoutes from "./routes/user-role";
+import userRoutes from "./routes/user";
+import productAttributeRoutes from "./routes/product-attribute";
+import productCategoryRoutes from "./routes/product-category";
+import productRoutes from "./routes/product";
+import couponRoutes from "./routes/coupon";
+import paymentSettingRoutes from "./routes/payment-setting";
+import orderRoutes from "./routes/order";
+import statisticsRoutes from "./routes/statistics";
+import rfqRoutes from "./routes/rfq";
+import blogPostCategoryRoutes from "./routes/blog-post-category";
+import blogPostTagRoutes from "./routes/blog-post-tag";
+import blogPostRoutes from "./routes/blog-post";
+import errorHandler from "./middleware/error-handler";
 
-// Initialize Prisma Client
-export const prisma = new PrismaClient();
-
-// Initialize Express app
 const app: Application = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN;
 
-// Middleware
-app.use(
-  cors({
-    origin:
-      process.env.ALLOWED_ORIGINS?.split(",") ||
-      "https://everwoodcollection.com",
-    credentials: true,
-  })
-);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(cors({ origin: CLIENT_ORIGIN }));
 app.use(generalLimiter);
+app.use("/contact", contactLimiter, contactRoutes);
+app.use("/user-role", userRoleRoutes);
+app.use("/user", userRoutes);
+app.use("/product-attribute", productAttributeRoutes);
+app.use("/product-category", productCategoryRoutes);
+app.use("/product", productRoutes);
+app.use("/coupon", couponRoutes);
+app.use("/payment", paymentSettingRoutes);
+app.use("/order", orderRoutes);
+app.use("/statistics", statisticsRoutes);
+app.use("/rfq", rfqRoutes);
+app.use("/blog-post-category", blogPostCategoryRoutes);
+app.use("/blog-post-tag", blogPostTagRoutes);
+app.use("/blog-post", blogPostRoutes);
 
-// Routes
-app.get("/", (_req: Request, res: Response) => {
-  res.json({ message: "Welcome to Furniture Website API" });
+app.get("/", (_, res) => {
+  res.status(200).json({ message: "Server is running successfully." });
 });
 
-app.get("/health", (_req: Request, res: Response) => {
-  res.json({ status: "OK", timestamp: new Date().toISOString() });
+app.use((_, res) => {
+  res.status(404).json({ message: "Route not found." });
 });
 
-// Example route to test Prisma connection
-app.get("/api/test-db", async (_req: Request, res: Response) => {
-  try {
-    // This will test the database connection
-    await prisma.$connect();
-    res.json({ message: "Database connection successful" });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Database connection failed", details: error });
-  }
-});
+app.use(errorHandler);
 
-// Register content/blog routes
-app.use("/contents", contentRoutes);
-
-// Register contact routes
-app.use("/api/contact", contactLimiter, contactRoutes);
-
-// Register notify routes
-app.use("/api/notify", notifyRoutes);
-
-// Error handling middleware
-app.use((err: Error, _req: Request, res: Response, _next: any) => {
-  console.error(err.stack);
-  res.status(500).json({ error: "Something went wrong!" });
-});
-
-// Start server
 const startServer = async () => {
   try {
-    await prisma.$connect();
-    console.log("Database connected successfully");
-
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-      console.log(`Environment: ${process.env.NODE_ENV}`);
-    });
-  } catch (error) {
-    console.error("Failed to start server:", error);
-    process.exit(1);
+    await mongoose.connect(process.env.MONGO_URI!);
+    app.listen(PORT, () => console.log("Listening on port", PORT));
+  } catch (err) {
+    console.log("Unable to connect to the database:", err);
   }
 };
 

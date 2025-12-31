@@ -1,74 +1,23 @@
-'use client'
-import { useEffect, useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
-import { onAuthStateChanged, User } from 'firebase/auth'
-import { auth } from '@/lib/firebase'
-import Sidebar from "./layout/Sidebar";
 import Navbar from "./layout/Navbar";
+import Sidebar from "./layout/Sidebar";
+
+import AdminRouteGuard from "@/components/AdminRouteGuard";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname()
-  const router = useRouter()
-  const isLoginPage = pathname === '/admin/login'
-  const isForgotPasswordPage = pathname === '/admin/login/forgot-password'
-  const isPublicPage = isLoginPage || isForgotPasswordPage
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser)
-      setLoading(false)
-
-      // Don't redirect if on public pages (login or forgot password)
-      if (isPublicPage) {
-        return
-      }
-
-      // Redirect to login if not authenticated
-      if (!currentUser) {
-        router.push('/admin/login')
-      }
-    })
-
-    return () => unsubscribe()
-  }, [pathname, router, isPublicPage])
-
-  // Don't render sidebar/navbar on public pages (login or forgot password)
-  if (isPublicPage) {
-    return <>{children}</>
-  }
-
-  // Show loading state while checking authentication
-  if (loading) {
-    return (
-      <div className="flex min-h-screen w-full bg-[#F8F8F6] font-poppins items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-button"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
+  return (
+    <AdminRouteGuard>
+      <div className="admin-light font-Tomorrow relative flex min-h-screen w-full overflow-hidden bg-white">
+        <Sidebar />
+        {/* Main content */}
+        <div className="relative z-10 container mx-auto flex flex-1 flex-col px-6 py-6 sm:px-16 sm:py-6 text-black">
+          <Navbar />
+          {children}
         </div>
       </div>
-    )
-  }
-
-  // Redirect to login if not authenticated (will be handled by useEffect, but prevent rendering)
-  if (!user) {
-    return null
-  }
-
-  return (
-    <div className="flex min-h-screen w-full bg-[#F8F8F6] font-poppins">
-      <Sidebar />
-      {/* Main content */}
-      <div className="container mx-auto flex-1 px-6 py-6 sm:px-16 sm:py-6">
-        <Navbar />
-        {/* Main content area */}
-        <div>{children}</div>
-      </div>
-    </div>
+    </AdminRouteGuard>
   );
 }

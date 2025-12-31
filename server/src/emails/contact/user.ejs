@@ -1,98 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You - Everwood Collection</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 40px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-            color: #475158;
-            margin-bottom: 10px;
-        }
-        h1 {
-            color: #475158;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        .message-box {
-            background-color: #f9f9f9;
-            border-left: 4px solid #475158;
-            padding: 15px;
-            margin: 20px 0;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
-            font-size: 12px;
-            color: #666;
-        }
-        .button {
-            display: inline-block;
-            padding: 12px 30px;
-            background-color: #ffffff;
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 25px;
-            margin: 20px 0;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">Everwood Collection</div>
-        </div>
-        
-        <h1>Thank You, <%= firstName %>!</h1>
-        
-        <p>We've received your message and appreciate you reaching out to us at Everwood Collection.</p>
-        
-        <div class="message-box">
-            <strong>Your Message:</strong><br>
-            <%= message %>
-        </div>
-        
-        <p>Our team will review your inquiry and get back to you within 24-48 hours.</p>
-        
-        <p>In the meantime, feel free to explore our furniture collection:</p>
-        
-        <center>
-            <a href="https://everwoodcollection.com" class="button">Visit Our Website</a>
-        </center>
-        
-        <div class="footer">
-            <p><strong>Everwood Collection</strong></p>
-            <p>Creating timeless furniture, crafted with care</p>
-            <p>
-                <a href="https://www.instagram.com/everwood.collection">Instagram</a> | 
-                <a href="https://www.facebook.com/everwoodcollection">Facebook</a>
-            </p>
-        </div>
+  <head>
+    <meta charset="utf-8" />
+    <title>TecHCD: We Received Your Message</title>
+  </head>
+  <body
+    style="
+      max-width: 600px;
+      margin: 0 auto;
+      font-family: Bahnschrift, 'DIN Alternate', 'Franklin Gothic Medium',
+        'Nimbus Sans Narrow', sans-serif-condensed, sans-serif;
+      font-weight: 300;
+      line-height: 1.1;
+      box-sizing: border-box;
+    "
+  >
+    <table style="margin-top: 1em; width: 100%">
+      <tr style="vertical-align: bottom">
+        <td>
+          <h1 style="margin: 0; font-weight: 600">We Received Your Message</h1>
+        </td>
+        <td>
+          <div style="margin-left: auto; width: 64px; height: 64px">
+            <img
+              src="https://techcd.s3.ap-south-1.amazonaws.com/TECHCD_LOGO.png"
+              alt="TecHCD Studios Logo"
+              width="100%"
+              height="100%"
+              style="object-fit: contain; object-position: center"
+            />
+          </div>
+        </td>
+      </tr>
+    </table>
+    <hr style="border: none; border-top: 1px solid rgba(0, 0, 0, 0.1)" />
+
+    <p>Hello <%= name %>,</p>
+    <p>
+      Thank you for reaching out. We have received your message and our team
+      will get back to you shortly.
+    </p>
+    <p>Given below are your submission details:</p>
+
+    <div style="background-color: rgba(0, 132, 240, 0.051); padding: 1em">
+      <p style="margin: 0"><strong>Name:</strong> <%= name %></p>
+      <p><strong>Email:</strong> <%= email %></p>
+      <p style="margin: 0">
+        <strong>Message:</strong><br />
+        <%= message %>
+      </p>
     </div>
-</body>
+
+    <p>
+      If you have any urgent queries, feel free to reply directly to this email.
+    </p>
+
+    <p>
+      Best regards, <br />
+      The TecHCD Team.
+    </p>
+
+    <hr style="border: none; border-top: 1px solid rgba(0, 0, 0, 0.1)" />
+    <p style="opacity: 0.4; font-size: 0.8em">© 2025 TecHCD</p>
+  </body>
 </html>
-
-

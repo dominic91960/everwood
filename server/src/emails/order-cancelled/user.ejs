@@ -1,0 +1,269 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>TecHCD: Order Cancelled</title>
+  </head>
+
+  <body
+    style="
+      max-width: 600px;
+      margin: 0 auto;
+      font-family: Bahnschrift, 'DIN Alternate', 'Franklin Gothic Medium',
+        'Nimbus Sans Narrow', sans-serif-condensed, sans-serif;
+      font-weight: 300;
+      line-height: 1.1;
+    "
+  >
+    <table style="margin-top: 1em; width: 100%">
+      <tr style="vertical-align: bottom">
+        <td>
+          <h1 style="margin: 0; font-weight: 600">Order Cancelled</h1>
+        </td>
+        <td>
+          <div style="margin-left: auto; width: 64px; height: 64px">
+            <img
+              src="https://techcd.s3.ap-south-1.amazonaws.com/TECHCD_LOGO.png"
+              alt="TecHCD Studios Logo"
+              width="100%"
+              height="100%"
+              style="object-fit: contain; object-position: center"
+            />
+          </div>
+        </td>
+      </tr>
+    </table>
+    <hr style="border: none; border-top: 1px solid rgba(0, 0, 0, 0.1)" />
+
+    <p style="margin-top: 0.9em">Hi <%= shippingInfo.firstName %>,</p>
+
+    <p>
+      We wanted to let you know that your order has been cancelled. We're sorry
+      this order didn't work out, and we understand plans can change.
+    </p>
+
+    <p>
+      If you didn't request the cancellation or believe this was a mistake,
+      please reach out to us right away at
+      <a
+        href="mailto:techcdlk@gmail.com"
+        style="text-decoration: none; color: #0084f0"
+        >techcdlk@gmail.com</a
+      >, and we'll be happy to assist.
+    </p>
+
+    <p>
+      If payment was already made, your refund will be processed according to
+      our policy within {{ refund_timeframe }}.
+    </p>
+
+    <h2 style="font-weight: 500">Order <%= shortId %></h2>
+
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+      <% products.forEach(function(p) { %>
+      <tr>
+        <td style="padding: 10px 0; border-bottom: 1px solid #eee">
+          <table
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            width="100%"
+            style="font-weight: 300"
+          >
+            <tr>
+              <td width="110" style="padding-right: 10px">
+                <div
+                  style="
+                    background-color: rgba(0, 0, 0, 0.1);
+                    padding: 0.5em;
+                    width: 100px;
+                    height: 100px;
+                  "
+                >
+                  <img
+                    src="<%= p.product.productImages[0] %>"
+                    alt="p.product.title"
+                    width="100%"
+                    height="100%"
+                    style="object-fit: contain; object-position: center"
+                  />
+                </div>
+              </td>
+              <td>
+                <table style="width: 100%">
+                  <tr>
+                    <td style="vertical-align: top">
+                      <p style="margin: 0">
+                        <%= p.product.title %> X <%= p.orderQuantity %>
+                      </p>
+                      <p style="margin: 0; color: #808080">
+                        <% p.attributes.forEach(function(a) { %> <%=
+                        a.selectedVariation %> <% }); %>
+                      </p>
+                    </td>
+                    <td
+                      style="
+                        vertical-align: top;
+                        text-align: right;
+                        margin-left: auto;
+                      "
+                    >
+                      <p>Rs.<%= p.totalPrice %></p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <% }); %>
+    </table>
+
+    <div style="width: 50%; margin: 1em 0 0 auto">
+      <ul style="list-style: none; margin: 0; padding: 0">
+        <li style="margin-bottom: 0.5em">
+          <table
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            width="100%"
+            style="font-weight: 300"
+          >
+            <tr>
+              <td>Subtotal:</td>
+              <td style="text-align: right">Rs.<%=subTotal%></td>
+            </tr>
+          </table>
+        </li>
+
+        <% if (discountAmount > 0) { %>
+        <li style="margin-bottom: 0.5em">
+          <table
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            width="100%"
+            style="font-weight: 300"
+          >
+            <tr>
+              <td>Discount:</td>
+              <td style="text-align: right">Rs.<%=discountAmount%></td>
+            </tr>
+          </table>
+        </li>
+        <% } %>
+        <li>
+          <table
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            width="100%"
+            style="font-weight: 300"
+          >
+            <tr>
+              <td>Shipping:</td>
+              <td style="text-align: right">Rs.<%=shippingCost%></td>
+            </tr>
+          </table>
+        </li>
+
+        <hr
+          style="
+            border: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            width: 100%;
+            margin-bottom: 0.5em;
+          "
+        />
+
+        <li>
+          <table
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            width="100%"
+            style="font-weight: 400"
+          >
+            <tr>
+              <td>Total:</td>
+              <td style="text-align: right">Rs.<%=grandTotal%></td>
+            </tr>
+          </table>
+        </li>
+      </ul>
+    </div>
+
+    <h2 style="font-weight: 500; margin-bottom: 0">Customer information</h2>
+    <div style="margin: 0">
+      <table
+        cellpadding="0"
+        cellspacing="0"
+        border="0"
+        width="100%"
+        style="font-weight: 300"
+      >
+        <tr>
+          <td>
+            <h4 style="font-weight: 500; margin: 1em 0 0.3em 0">
+              Shipping Address
+            </h4>
+            <p style="margin: 0 0 0.4em 0">
+              <%=shippingInfo.firstName%> <%=shippingInfo.lastName%>
+            </p>
+            <p style="margin: 0 0 0.4em 0"><%=shippingInfo.address%>,</p>
+            <p style="margin: 0 0 0.4em 0">
+              <%=shippingInfo.city%>, <%=shippingInfo.state%>,
+              <%=shippingInfo.zipCode%>
+            </p>
+            <p style="margin: 0"><%=shippingInfo.phoneNo%></p>
+          </td>
+
+          <td>
+            <h4 style="font-weight: 500; margin: 1em 0 0.3em 0">
+              Billing Address
+            </h4>
+            <p style="margin: 0 0 0.4em 0">
+              <%=billingInfo.firstName%> <%=billingInfo.lastName%>
+            </p>
+            <p style="margin: 0 0 0.4em 0"><%=billingInfo.address%>,</p>
+            <p style="margin: 0 0 0.4em 0">
+              <%=billingInfo.city%>, <%=billingInfo.state%>,
+              <%=billingInfo.zipCode%>
+            </p>
+            <p style="margin: 0"><%=billingInfo.phoneNo%></p>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div style="background-color: #f3f4f6; margin-top: 1em; padding: 1em">
+      <h4 style="font-weight: 500; margin: 0; margin-bottom: 0.3em">
+        Payment Method
+      </h4>
+      <p style="text-transform: capitalize; margin: 0; color: #374151">
+        <%=paymentMethod.replace("-", " ")%>
+      </p>
+    </div>
+
+    <div style="background-color: #fee2e2; margin-top: 1em; padding: 1em">
+      <h4 style="font-weight: 500; margin: 0; margin-bottom: 0.3em">
+        Order Status
+      </h4>
+      <p style="text-transform: capitalize; margin: 0; color: #dc2626">
+        <%=status.replace("-", " ")%>
+      </p>
+    </div>
+
+    <p style="margin-top: 1.5em">
+      Thank you for your understanding, and we hope to serve you again soon.
+    </p>
+
+    <p>
+      Best regards, <br />
+      The TecHCD Team.
+    </p>
+
+    <hr style="border: none; border-top: 1px solid rgba(0, 0, 0, 0.1)" />
+    <p style="opacity: 0.4; font-size: 0.8em">© 2025 TecHCD</p>
+  </body>
+</html>

@@ -1,27 +1,38 @@
 # Dependencies
-node_modules/
+/node_modules
+/npm-debug.log*
+/yarn-debug.log*
+/yarn-error.log*
+/pnpm-debug.log*
+/lerna-debug.log*
+.pnp
+.pnp.js
 
-# Environment variables
+# Testing
+/coverage
+/.nyc_output
+/testem.log
+
+# Production/Distribution
+/dist
+/build
+/out
+/public
+
+# Environment/Runtime
 .env
-
-# Build output
-dist/
-
-# Logs
-logs/
-*.log
-npm-debug.log*
-
-# OS files
+.env.*
+!.env.example
 .DS_Store
-Thumbs.db
+/Thumbs.db
 
-# IDE
+# Compiled JavaScript/TypeScript (if not using 'dist' or 'build')
+/lib
+/es
+/tsout
+
+# IDEs and Editors
+/.idea
 .vscode/
-.idea/
 *.swp
-*.swo
-*~
-
-# Prisma
-prisma/migrations/
+.history/

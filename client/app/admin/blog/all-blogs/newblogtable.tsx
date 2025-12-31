@@ -2,14 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
-import { columns, Blog, ActionCell } from "./columns";
+import { columns, ActionCell } from "./columns";
 import { DataTable } from "./DataTable";
-import api from "@/lib/api";
+import api from "@/lib/api/blog-api";
+import { BlogPost } from "@/lib/types";
 
 const AdminDashboardPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter] = useState("all");
-  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,27 +20,11 @@ const AdminDashboardPage: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        
-        // Fetch all blog type content
-        const response = await api.content.list({ type: 'BLOG' });
 
-        console.log('Fetched blogs:', response);
-        
-        // Transform API response to match Blog type
-        const transformedBlogs: Blog[] = response.map((item: { id: string; title?: string; thumbnail?: string; time?: string; createdAt?: string; mode?: string; content?: string }) => ({
-          id: item.id,
-          title: item.title || 'Untitled',
-          thumbnailImage: item.thumbnail || '/image/placeholder.jpg',
-          startTime: item.time ? new Date(item.time).toLocaleTimeString() : '',
-          date: item.time ? new Date(item.time).toLocaleDateString() : (item.createdAt ? new Date(item.createdAt).toLocaleDateString() : new Date().toLocaleDateString()),
-          status: item.mode === 'PUBLISHED' ? 'Published' : 'Draft',
-          content: item.content || '',
-        }));
-        
-        setBlogs(transformedBlogs);
+        const response = await api.article.list();
+        setBlogs(response);
       } catch (err) {
-        console.error('Failed to fetch blogs:', err);
-        setError(err instanceof Error ? err.message : 'Failed to fetch blogs');
+        setError(err instanceof Error ? err.message : "Failed to fetch blogs");
       } finally {
         setLoading(false);
       }
@@ -47,42 +32,39 @@ const AdminDashboardPage: React.FC = () => {
 
     fetchBlogs();
   }, []);
-  
 
   // Enhanced filtering logic
-  const filteredBlogs: Blog[] = blogs.filter((blog: Blog) => {
+  const filteredBlogs: BlogPost[] = blogs.filter((blog: BlogPost) => {
     // Status filter
     const statusMatches =
-      statusFilter === "all" || 
+      statusFilter === "all" ||
       blog.status.toLowerCase() === statusFilter.toLowerCase();
 
     // Title search
-    const titleMatches = 
+    const titleMatches =
       searchTerm === "" ||
-      (blog.title && blog.title.toLowerCase().includes(searchTerm.toLowerCase()));
+      (blog.title &&
+        blog.title.toLowerCase().includes(searchTerm.toLowerCase()));
 
     return statusMatches && titleMatches;
   });
 
   const handleDeleteBlog = async (id: string) => {
     try {
-      await api.content.delete(id);
-      setBlogs(prev => prev.filter(blog => blog.id !== id));
+      await api.article.delete(id);
+      setBlogs((prev) => prev.filter((blog) => blog._id !== id));
     } catch (err) {
-      console.error('Failed to delete blog:', err);
-      alert('Failed to delete blog. Please try again.');
+      console.error("Failed to delete blog:", err);
+      alert("Failed to delete blog. Please try again.");
     }
   };
 
-  const customColumns = columns.map(col =>
+  const customColumns = columns.map((col) =>
     col.id === "actions"
       ? {
           ...col,
-          cell: (props: { row: { original: Blog } }) => (
-            <ActionCell
-              row={props.row}
-              handleDeleteBlog={handleDeleteBlog}
-            />
+          cell: (props: { row: { original: BlogPost } }) => (
+            <ActionCell row={props.row} handleDeleteBlog={handleDeleteBlog} />
           ),
         }
       : col
@@ -92,23 +74,23 @@ const AdminDashboardPage: React.FC = () => {
     <div>
       <div className="container mx-auto">
         {/* Blogs Table with Sorting & Search */}
-        <div className="mt-6 rounded-2xl bg-white shadow-[0px_10px_60px_rgba(226,236,249,0.5)] p-6 sm:gap-0">
+        <div className="mt-6 rounded-2xl bg-white p-6 shadow-[0px_10px_60px_rgba(226,236,249,0.5)] sm:gap-0">
           {error && (
-            <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            <div className="mb-4 rounded border border-red-400 bg-red-100 p-4 text-red-700">
               Error: {error}
             </div>
           )}
-          
-          <div className="grid gap-4 sm:mb-6 sm:items-center sm:justify-between  sm:gap-2 md:flex flex-wrap">
+
+          <div className="grid flex-wrap gap-4 sm:mb-6 sm:items-center sm:justify-between sm:gap-2 md:flex">
             <div>
-              <h1 className="font-bold text-[28px] sm:text-[24px] md:text-[26px] lg:text-[28px] 2xl:text-[22px] ml-[10px]">
-                All Blogs {loading ? '(Loading...)' : `(${blogs.length})`}
+              <h1 className="ml-2.5 text-[28px] font-bold sm:text-[24px] md:text-[26px] lg:text-[28px] 2xl:text-[22px]">
+                All Blogs {loading ? "(Loading...)" : `(${blogs.length})`}
               </h1>
             </div>
 
-            <div className="grid gap-4 sm:flex mr-[140px] sm:gap-4">
+            <div className="mr-[140px] grid gap-4 sm:flex sm:gap-4">
               {/* Search Input - searches titles */}
-              <div className="relative ">
+              <div className="relative">
                 <input
                   type="text"
                   placeholder="Search by title"
@@ -116,31 +98,13 @@ const AdminDashboardPage: React.FC = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-[220px] rounded-2xl bg-[#F9FBFF] p-2 px-3 pl-10 md:w-[250px] lg:w-[280px] xl:w-[285px] 2xl:w-[305px]"
                 />
-                <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
+                <FaSearch className="absolute top-1/2 left-3 -translate-y-1/2 transform text-black" />
               </div>
-
-              {/* Status Filter */}
-              {/* <div className="relative bg-[#F9FBFF] rounded-2xl mt-[7px]">
-                <label className="text-[12px]">Status:</label>
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-2 py-1 text-[12px] bg-[#F9FBFF]"
-                >
-                  <option value="all">All</option>
-                  <option value="Published" className="text-[#00AC4F] font-poppins">Published</option>
-                  <option value="Draft" className="text-[#0F5FC2] font-poppins">Draft</option>
-                  <option value="Archived" className="text-[#D0004B] font-poppins">Archived</option>
-                </select>
-              </div> */}
             </div>
           </div>
 
-          <div className="mt-[10px] sm:mt-0">
-            <DataTable 
-              columns={customColumns} 
-              data={filteredBlogs} 
-            />
+          <div className="mt-2.5 sm:mt-0">
+            <DataTable columns={customColumns} data={filteredBlogs} />
           </div>
         </div>
       </div>

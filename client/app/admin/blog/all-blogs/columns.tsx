@@ -7,20 +7,17 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import DeletePopup from "./DeletePopup";
 import Image from "next/image";
-import api from "@/lib/api";
-
-export type Blog = {
-  id: string;
-  title: string;
-  thumbnailImage: string;
-  startTime: string;
-  date: string;
-  status: "Published" | "Draft" | "Archived";
-  content: string;
-};
+import api from "@/lib/api/blog-api";
+import { BlogPost } from "@/lib/types";
 
 // ActionCell component
-export const ActionCell = ({ row, handleDeleteBlog }: { row: { original: Blog }, handleDeleteBlog?: (id: string) => Promise<void> }) => {
+export const ActionCell = ({
+  row,
+  handleDeleteBlog,
+}: {
+  row: { original: BlogPost };
+  handleDeleteBlog?: (id: string) => Promise<void>;
+}) => {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -28,7 +25,10 @@ export const ActionCell = ({ row, handleDeleteBlog }: { row: { original: Blog },
   const handleViewClick = (id: string) => {
     try {
       if (typeof window !== "undefined") {
-        window.sessionStorage.setItem("selectedBlog", JSON.stringify(row.original));
+        window.sessionStorage.setItem(
+          "selectedBlog",
+          JSON.stringify(row.original)
+        );
       }
     } catch {}
     router.push(`/admin/blog/all-blogs/view-blog/${id}?isEdit=false`);
@@ -36,7 +36,10 @@ export const ActionCell = ({ row, handleDeleteBlog }: { row: { original: Blog },
   const handleEditClick = (id: string) => {
     try {
       if (typeof window !== "undefined") {
-        window.sessionStorage.setItem("selectedBlog", JSON.stringify(row.original));
+        window.sessionStorage.setItem(
+          "selectedBlog",
+          JSON.stringify(row.original)
+        );
       }
     } catch {}
     router.push(`/admin/blog/all-blogs/view-blog/${id}?isEdit=true`);
@@ -47,13 +50,13 @@ export const ActionCell = ({ row, handleDeleteBlog }: { row: { original: Blog },
     setLoading(true);
     try {
       if (handleDeleteBlog) {
-        await handleDeleteBlog(row.original.id);
+        await handleDeleteBlog(row.original._id);
       } else {
-        await api.content.delete(row.original.id);
+        await api.article.delete(row.original._id);
       }
       setOpen(false);
     } catch (error) {
-      console.error('Failed to delete blog:', error);
+      console.error("Failed to delete blog:", error);
       // Optional: surface a toast/alert here
     } finally {
       setLoading(false);
@@ -63,17 +66,40 @@ export const ActionCell = ({ row, handleDeleteBlog }: { row: { original: Blog },
   const handleClose = () => setOpen(false);
 
   return (
-    <div className="flex flex-wrap items-center gap-2 ml-[-10px]">
-      <Button variant="outline" onClick={() => handleViewClick(row.original.id)} className="!bg-transparent !border-none hover:!bg-transparent hover:!border-none flex-shrink-0"><RiEyeLine size={20} /></Button>
-      <Button variant="outline" onClick={() => handleEditClick(row.original.id)} className="!bg-transparent !border-none hover:!bg-transparent hover:!border-none flex-shrink-0"><RiEditLine size={20} /></Button>
-      <Button variant="outline" onClick={handleDeleteClick} className="!bg-transparent !border-none hover:!bg-transparent hover:!border-none flex-shrink-0"><RiDeleteBinLine size={20} /></Button>
-      <DeletePopup open={open} onClose={handleClose} onConfirm={handleConfirmDelete} loading={loading} />
+    <div className="-ml-2.5 flex flex-wrap items-center gap-2">
+      <Button
+        variant="outline"
+        onClick={() => handleViewClick(row.original._id)}
+        className="shrink-0 border-none! bg-transparent! hover:border-none! hover:bg-transparent!"
+      >
+        <RiEyeLine size={20} />
+      </Button>
+      <Button
+        variant="outline"
+        onClick={() => handleEditClick(row.original._id)}
+        className="shrink-0 border-none! bg-transparent! hover:border-none! hover:bg-transparent!"
+      >
+        <RiEditLine size={20} />
+      </Button>
+      <Button
+        variant="outline"
+        onClick={handleDeleteClick}
+        className="shrink-0 border-none! bg-transparent! hover:border-none! hover:bg-transparent!"
+      >
+        <RiDeleteBinLine size={20} />
+      </Button>
+      <DeletePopup
+        open={open}
+        onClose={handleClose}
+        onConfirm={handleConfirmDelete}
+        loading={loading}
+      />
     </div>
   );
 };
 
 // Define table columns
-export const columns: ColumnDef<Blog>[] = [
+export const columns: ColumnDef<BlogPost>[] = [
   {
     accessorKey: "title",
     header: "Title",
@@ -82,36 +108,24 @@ export const columns: ColumnDef<Blog>[] = [
     accessorKey: "thumbnailImage",
     header: "Thumbnail Image",
     cell: ({ row }) => (
-      <div className="w-16 h-16 rounded-lg overflow-hidden">
-        <Image 
-          src={row.original.thumbnailImage} 
-          alt={row.original.title}
-          width={64}
-          height={64}
-          className="w-full h-full object-cover"
-        />
-      </div>
+      <Image
+        src={row.original.thumbnail}
+        alt=""
+        width={64}
+        height={64}
+        className="h-16 w-16 object-contain rounded-lg border border-black/20"
+      />
     ),
   },
   {
     accessorKey: "content",
     header: "Description",
-    cell: ({ row }) => {
-      const content = row.original.content;
-      return (
-        <div
-          className="line-clamp-3 prose max-w-none"
-          dangerouslySetInnerHTML={{ __html: typeof content === 'string' ? content : '' }}
-        />
-      );
-    },
+    cell: ({ row }) => <span>{row.original.description}</span>,
   },
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => (
-      <span>{row.original.status}</span>
-    ),
+    cell: ({ row }) => <span>{row.original.status}</span>,
   },
   {
     accessorKey: "date",

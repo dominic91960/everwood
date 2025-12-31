@@ -1,87 +1,85 @@
-"use client"; // This tells Next.js it's a client component
-import  { useEffect, useState } from "react";
-import { Monitor, Users } from "lucide-react";
+"use client";
+
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
+import Image from "next/image";
+
+import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { toast } from "sonner";
+import { FaUser } from "react-icons/fa";
+import { GoHomeFill } from "react-icons/go";
+import { IoLogOut } from "react-icons/io5";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/user/ui/DropdownMenu";
+import { useAuthStore } from "@/store/auth-store";
 
 const Navbar = () => {
-  const [admissionCount, setAdmissionCount] = useState<number | null>(null);
-  const [studentCount, setStudentCount] = useState<number | null>(null);
-  const [userEmail, setUserEmail] = useState<string>('');
-  const [userInitial, setUserInitial] = useState<string>('A');
   const router = useRouter();
+  const { user, setUser } = useAuthStore();
+  const [isDisabled, setIsDisabled] = useState(false);
 
-  useEffect(() => {
-    // Listen to authentication state
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user && user.email) {
-        setUserEmail(user.email);
-        setUserInitial(user.email.charAt(0).toUpperCase());
-      }
-    });
+  const handleSignOut = async () => {
+    try {
+      setIsDisabled(true);
+      toast.info("Signing out...");
 
-    return () => unsubscribe();
-  }, []);
+      await signOut(auth);
+      setUser(null);
 
-  useEffect(() => {
-    const fetchCounts = () => {
-      // Fetch total admissions count
-      fetch("http://localhost:5000/admissions")
-        .then((res) => res.json())
-        .then((data) => {
-          let admissionsArray = [];
-          if (Array.isArray(data)) {
-            admissionsArray = data;
-          } else if (Array.isArray(data.data)) {
-            admissionsArray = data.data;
-          }
-          setAdmissionCount(admissionsArray.length);
-        })
-        .catch(() => setAdmissionCount(null));
-
-      // Fetch student count from localStorage (set by newstudenttable)
-      if (typeof window !== 'undefined') {
-        const count = localStorage.getItem('currentStudentCount');
-        setStudentCount(count ? parseInt(count, 10) : null);
-      }
-    };
-
-    fetchCounts();
-    window.addEventListener('studentCountChanged', fetchCounts);
-    return () => {
-      window.removeEventListener('studentCountChanged', fetchCounts);
-    };
-  }, []);
-
-  const handleProfileClick = () => {
-    router.push('/admin/profile');
+      toast.success("Sign out successful");
+    } catch {
+      toast.error("Sign out failed");
+    } finally {
+      setIsDisabled(false);
+    }
   };
-  
-  return (
-    <div className=" ">
-      <div className="md:flex sm:px-0 px-5 container mx-auto md:justify-between xl:mb-6 grid sm:mt-0 md:gap-0 gap-3  xl:space-y-0">
-        <div>
-          <h1 className="2xl:text-3xl xl:text-[26px] text-xl font-bold">
-            Welcome Back Admin 👋🏼
-          </h1>
-        </div>
-        <div className="flex items-center space-x-3">
-          <div className="text-right hidden sm:block">
-            <p className="text-sm text-gray-600">{userEmail || 'admin@furniture.com'}</p>
-            <p className="text-xs text-gray-500">Administrator</p>
-          </div>
-          <button 
-            onClick={handleProfileClick}
-            className="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center hover:bg-indigo-700 transition-colors cursor-pointer"
-            title="View Profile"
-          >
-            <span className="text-white font-semibold text-lg">{userInitial}</span>
-          </button>
-        </div>
-      </div>
 
-     
+  const navigate = (href: string) => {
+    router.push(href);
+  };
+
+  if (!user) return null;
+
+  return (
+    <div className="container mx-auto mb-[1em] flex flex-col-reverse items-end sm:flex-row sm:justify-between">
+      <h1 className="hidden text-gray-700 sm:block">
+        Welcome Back {user.firstName} 👋🏼
+      </h1>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger className="border-foreground relative size-[2em] overflow-hidden rounded-full border-2 opacity-80 hover:opacity-100 focus:opacity-100 lg:size-[1.8em]">
+          <Image
+            src={user.avatar}
+            alt={`${user.firstName} ${user.lastName}`}
+            fill
+            className="rounded-full object-contain object-center"
+          />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={() => navigate("/admin/Profile")}>
+            <FaUser />
+            <p>Profile</p>
+          </DropdownMenuItem>
+
+          {user.role.name !== "CUSTOMER" && (
+            <DropdownMenuItem onClick={() => navigate("/")}>
+              <GoHomeFill className="text-[1.2em]" />
+              <p>Back To Home</p>
+            </DropdownMenuItem>
+          )}
+
+          <DropdownMenuItem onClick={handleSignOut} disabled={isDisabled}>
+            <IoLogOut className="text-[1.2em]" />
+            Logout
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
